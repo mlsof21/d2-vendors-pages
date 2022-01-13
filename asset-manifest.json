@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/d2-vendors-pages/static/css/main.098917e0.chunk.css",
-    "main.js": "/d2-vendors-pages/static/js/main.41359add.chunk.js",
-    "main.js.map": "/d2-vendors-pages/static/js/main.41359add.chunk.js.map",
+    "main.js": "/d2-vendors-pages/static/js/main.ff621af3.chunk.js",
+    "main.js.map": "/d2-vendors-pages/static/js/main.ff621af3.chunk.js.map",
     "runtime-main.js": "/d2-vendors-pages/static/js/runtime-main.192652b6.js",
     "runtime-main.js.map": "/d2-vendors-pages/static/js/runtime-main.192652b6.js.map",
     "static/js/2.3b976f0c.chunk.js": "/d2-vendors-pages/static/js/2.3b976f0c.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.192652b6.js",
     "static/js/2.3b976f0c.chunk.js",
     "static/css/main.098917e0.chunk.css",
-    "static/js/main.41359add.chunk.js"
+    "static/js/main.ff621af3.chunk.js"
   ]
 }
