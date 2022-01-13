@@ -15,15 +15,15 @@ async function set(key: string, val: any) {
   return (await dbp).put('d2', val, key);
 }
 
-async function del(key: string) {
-  return (await dbp).delete('d2', key);
-}
-async function clear() {
-  return (await dbp).clear('d2');
-}
-async function keys() {
-  return (await dbp).getAllKeys('d2');
-}
+// async function del(key: string) {
+//   return (await dbp).delete('d2', key);
+// }
+// async function clear() {
+//   return (await dbp).clear('d2');
+// }
+// async function keys() {
+//   return (await dbp).getAllKeys('d2');
+// }
 
 export async function storeManifest(
   manifest: DestinyManifestSlice<['DestinyInventoryItemDefinition', 'DestinyStatDefinition']>,

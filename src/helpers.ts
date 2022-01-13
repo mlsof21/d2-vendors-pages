@@ -4,6 +4,8 @@ import TokenStorage, { Token, Tokens } from './storage/Tokens';
 export const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY || '';
 export const CLIENT_ID = process.env.REACT_APP_BUNGIE_CLIENT_ID || '';
 export const CLIENT_SECRET = process.env.REACT_APP_BUNGIE_CLIENT_SECRET || '';
+export const REDIRECT_URI = process.env.REACT_APP_BUNGIE_REDIRECT_URI || '';
+
 export const bungieApiRoot = 'https://www.bungie.net/Platform';
 
 export async function getActiveToken(): Promise<Tokens> {

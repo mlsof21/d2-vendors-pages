@@ -1,6 +1,4 @@
 import {
-  DestinyClass,
-  DestinyComponentType,
   DestinyManifest,
   DestinyManifestSlice,
   DestinyProfileResponse,
