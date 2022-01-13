@@ -1,23 +1,22 @@
 {
   "files": {
-    "main.css": "/d2-vendors-pages/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/d2-vendors-pages/static/js/main.e33a1392.chunk.js",
-    "main.js.map": "/d2-vendors-pages/static/js/main.e33a1392.chunk.js.map",
-    "runtime-main.js": "/d2-vendors-pages/static/js/runtime-main.1c543ef0.js",
-    "runtime-main.js.map": "/d2-vendors-pages/static/js/runtime-main.1c543ef0.js.map",
-    "static/js/2.2a3c9700.chunk.js": "/d2-vendors-pages/static/js/2.2a3c9700.chunk.js",
-    "static/js/2.2a3c9700.chunk.js.map": "/d2-vendors-pages/static/js/2.2a3c9700.chunk.js.map",
-    "static/js/3.d5aad931.chunk.js": "/d2-vendors-pages/static/js/3.d5aad931.chunk.js",
-    "static/js/3.d5aad931.chunk.js.map": "/d2-vendors-pages/static/js/3.d5aad931.chunk.js.map",
-    "index.html": "/d2-vendors-pages/index.html",
-    "static/css/main.8c8b27cf.chunk.css.map": "/d2-vendors-pages/static/css/main.8c8b27cf.chunk.css.map",
-    "static/js/2.2a3c9700.chunk.js.LICENSE.txt": "/d2-vendors-pages/static/js/2.2a3c9700.chunk.js.LICENSE.txt",
-    "static/media/logo.6ce24c58.svg": "/d2-vendors-pages/static/media/logo.6ce24c58.svg"
+    "main.css": "/d2-vendor-pages/static/css/main.098917e0.chunk.css",
+    "main.js": "/d2-vendor-pages/static/js/main.a185c046.chunk.js",
+    "main.js.map": "/d2-vendor-pages/static/js/main.a185c046.chunk.js.map",
+    "runtime-main.js": "/d2-vendor-pages/static/js/runtime-main.536e2fa8.js",
+    "runtime-main.js.map": "/d2-vendor-pages/static/js/runtime-main.536e2fa8.js.map",
+    "static/js/2.6a0a2ff7.chunk.js": "/d2-vendor-pages/static/js/2.6a0a2ff7.chunk.js",
+    "static/js/2.6a0a2ff7.chunk.js.map": "/d2-vendor-pages/static/js/2.6a0a2ff7.chunk.js.map",
+    "static/js/3.a9273140.chunk.js": "/d2-vendor-pages/static/js/3.a9273140.chunk.js",
+    "static/js/3.a9273140.chunk.js.map": "/d2-vendor-pages/static/js/3.a9273140.chunk.js.map",
+    "index.html": "/d2-vendor-pages/index.html",
+    "static/css/main.098917e0.chunk.css.map": "/d2-vendor-pages/static/css/main.098917e0.chunk.css.map",
+    "static/js/2.6a0a2ff7.chunk.js.LICENSE.txt": "/d2-vendor-pages/static/js/2.6a0a2ff7.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.1c543ef0.js",
-    "static/js/2.2a3c9700.chunk.js",
-    "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.e33a1392.chunk.js"
+    "static/js/runtime-main.536e2fa8.js",
+    "static/js/2.6a0a2ff7.chunk.js",
+    "static/css/main.098917e0.chunk.css",
+    "static/js/main.a185c046.chunk.js"
   ]
 }
