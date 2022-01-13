@@ -83,14 +83,14 @@ export async function getManifest(): Promise<DestinyManifest> {
 }
 
 export async function getDestinyInventoryItemManifest(): Promise<
-  DestinyManifestSlice<'DestinyInventoryItemDefinition'[]>
+  DestinyManifestSlice<['DestinyInventoryItemDefinition', 'DestinyStatDefinition']>
 > {
   const manifest = await getManifest();
   const manifestSlice = await getDestinyManifestSlice($http, {
     destinyManifest: manifest,
     language: 'en',
-    tableNames: ['DestinyInventoryItemDefinition'],
+    tableNames: ['DestinyInventoryItemDefinition', 'DestinyStatDefinition'],
   });
-
+  console.log({ manifestSlice });
   return manifestSlice;
 }

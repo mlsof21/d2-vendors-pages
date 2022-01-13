@@ -1,6 +1,12 @@
+import { DestinyStatDefinition } from 'bungie-api-ts/destiny2';
 import { ReactElement, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getDestinyInventoryItemManifest, getMembershipInfo } from '../../bungie-api/destiny2-api';
+import {
+  getDestinyInventoryItemDefinitionFromStore,
+  getDestinyStatDefinitionFromStore,
+  storeManifest,
+} from '../../storage/IndexedDB';
 import MembershipInfoStorage from '../../storage/Membership';
 import TokenStorage from '../../storage/Tokens';
 
@@ -28,8 +34,14 @@ function Home(): ReactElement {
   }, []);
 
   async function getData() {
-    const inventoryItemManifest = await getDestinyInventoryItemManifest();
-
+    let d2StatDef = await getDestinyStatDefinitionFromStore();
+    let d2invItemDef = await getDestinyInventoryItemDefinitionFromStore();
+    if (!d2StatDef || !d2invItemDef) {
+      const inventoryItemManifest = await getDestinyInventoryItemManifest();
+      await storeManifest(inventoryItemManifest);
+      d2StatDef = await getDestinyStatDefinitionFromStore();
+      d2invItemDef = await getDestinyInventoryItemDefinitionFromStore();
+    }
     if (!membershipInfo) {
       membershipInfo = await getMembershipInfo(membershipId);
       membershipInfoStorage.setMembershipInfo(JSON.stringify(membershipInfo));
@@ -42,7 +54,7 @@ function Home(): ReactElement {
     return <>Loading User Info</>;
   }
 
-  return <>This is the Home page</>;
+  return <>This is the home page</>;
 }
 
 export default Home;

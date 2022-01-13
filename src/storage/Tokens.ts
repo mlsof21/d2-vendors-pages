@@ -43,7 +43,7 @@ export default class TokenStorage extends Storage<Locals> {
 
     return this.instance;
   }
-  public setAllTokens(token: Tokens) {
+  public setAllTokens(token: Tokens): void {
     this.set(Locals.ALL_TOKENS, JSON.stringify(token));
   }
 
@@ -53,7 +53,7 @@ export default class TokenStorage extends Storage<Locals> {
     return allTokens ? JSON.parse(allTokens) : null;
   }
 
-  public clear() {
+  public clear(): void {
     this.clearItems([Locals.ALL_TOKENS]);
   }
 }

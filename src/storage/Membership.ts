@@ -20,7 +20,7 @@ export default class MembershipInfoStorage extends Storage<Locals> {
     super();
   }
 
-  public static getInstance() {
+  public static getInstance(): MembershipInfoStorage {
     if (!this.instance) {
       this.instance = new MembershipInfoStorage();
     }
@@ -34,7 +34,7 @@ export default class MembershipInfoStorage extends Storage<Locals> {
     return undefined;
   }
 
-  public setMembershipInfo(membershipInfo: string) {
+  public setMembershipInfo(membershipInfo: string): void {
     this.set(Locals.MEMBERSHIP_INFO, membershipInfo);
   }
 }
