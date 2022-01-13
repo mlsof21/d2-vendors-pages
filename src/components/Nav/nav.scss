@@ -1,0 +1,16 @@
+.navbar {
+  background: #464a52;
+  padding: 1rem;
+  text-align: left;
+  a {
+    display: inline-block;
+    background: #383841;
+    text-decoration: none;
+    color: #6178fb;
+    margin: 0 0.5rem;
+    padding: 0.5rem;
+    &:hover {
+      background-color: #ccc;
+    }
+  }
+}
