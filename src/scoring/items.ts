@@ -37,7 +37,8 @@ export interface VendorArmor {
 }
 
 export interface SaleArmor {
-  [saleKey: number]: {
+  [armorType: number]: {
+    saleKey?: number;
     itemHash?: number;
     armorType?: string;
     stats?: ArmorStats;
@@ -47,6 +48,7 @@ export interface SaleArmor {
 }
 
 export interface Armor {
+  saleKey?: number;
   itemHash?: number;
   armorType?: string;
   stats?: ArmorStats;
@@ -107,7 +109,7 @@ async function getArmor(
       const itemSubType = d2inventoryItems[itemHash].itemSubType;
       const summaryItemHash = d2inventoryItems[itemHash].summaryItemHash!;
       if (isScorable(itemSubType) && summaryItemHash !== 715326750) {
-        armor[saleItemKey] = { itemHash, armorType: armorTypes[itemSubType] };
+        armor[itemSubType] = { itemHash, saleKey: saleItemKey, armorType: armorTypes[itemSubType] };
       }
     }
   }
@@ -127,14 +129,15 @@ export async function getArmorScores(
 ) {
   for (const classType in scorableItems) {
     for (const vendorHash in scorableItems[classType])
-      for (const saleKey in scorableItems[classType][vendorHash]) {
+      for (const itemSubType in scorableItems[classType][vendorHash]) {
         if (allVendors[classType].itemComponents[vendorHash].stats.data) {
+          const saleKey = scorableItems[classType][vendorHash][itemSubType].saleKey!;
           const stats = allVendors[classType].itemComponents[vendorHash].stats.data![saleKey];
-          scorableItems[classType][vendorHash][saleKey].stats = getStats(stats.stats);
+          scorableItems[classType][vendorHash][itemSubType].stats = getStats(stats.stats);
 
-          const scores = getScores(scorableItems[classType][vendorHash][saleKey].stats!, parseInt(classType));
-          scorableItems[classType][vendorHash][saleKey].rawScore = scores.rawScore;
-          scorableItems[classType][vendorHash][saleKey].normalizedScore = scores.normalizedScore;
+          const scores = getScores(scorableItems[classType][vendorHash][itemSubType].stats!, parseInt(classType));
+          scorableItems[classType][vendorHash][itemSubType].rawScore = scores.rawScore;
+          scorableItems[classType][vendorHash][itemSubType].normalizedScore = scores.normalizedScore;
         }
       }
   }

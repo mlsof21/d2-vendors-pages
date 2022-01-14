@@ -8,6 +8,12 @@ export const classHashMap: Dictionary<string> = {
   '2271682572': 'Warlock',
 };
 
+export const classTypeMap: Dictionary<string> = {
+  1: 'Hunter',
+  0: 'Titan',
+  2: 'Warlock',
+};
+
 export const vendorHashes: Dictionary<string> = {
   350061650: 'Ada-1',
   396892126: 'Devrim',
