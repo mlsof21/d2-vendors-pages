@@ -25,7 +25,7 @@ function Login(): ReactElement {
       redirectUri={REDIRECT_URI}
       onSuccess={onSuccess}
       onFailure={onFailure}
-      buttonText="Login with Bungie.net Now"
+      buttonText="Login with Bungie.net"
       className="loginButton"
     />
   );

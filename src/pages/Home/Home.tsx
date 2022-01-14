@@ -2,6 +2,7 @@ import { DestinyStatDefinition } from 'bungie-api-ts/destiny2';
 import { ReactElement, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getDestinyInventoryItemManifest, getMembershipInfo } from '../../bungie-api/destiny2-api';
+import Spinner from '../../components/Spinner/Spinner';
 import {
   getDestinyInventoryItemDefinitionFromStore,
   getDestinyStatDefinitionFromStore,
@@ -51,7 +52,7 @@ function Home(): ReactElement {
   }
 
   if (loading) {
-    return <>Loading User Info</>;
+    return <Spinner text="Loading Destiny manifest" />;
   }
 
   return <>This is the home page</>;

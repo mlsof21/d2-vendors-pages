@@ -1,18 +1,23 @@
 import { DestinyInventoryItemDefinition, DestinyManifestSlice, DestinyStatDefinition } from 'bungie-api-ts/destiny2';
 import { openDB } from 'idb';
 
-const dbp = openDB('destiny2-store', 1, {
-  upgrade(db) {
-    db.createObjectStore('d2');
-  },
-});
-
+// TODO: make this a class
 async function get<Type>(key: string): Promise<Type> {
-  return (await dbp).get('d2', key);
+  const dbp = await openDB('destiny2-store', 1, {
+    upgrade(db) {
+      db.createObjectStore('d2');
+    },
+  });
+  return dbp.get('d2', key);
 }
 
 async function set(key: string, val: any) {
-  return (await dbp).put('d2', val, key);
+  const dbp = await openDB('destiny2-store', 1, {
+    upgrade(db) {
+      db.createObjectStore('d2');
+    },
+  });
+  return dbp.put('d2', val, key);
 }
 
 // async function del(key: string) {
@@ -32,10 +37,12 @@ export async function storeManifest(
   await set('DestinyStatDefinition', manifest.DestinyStatDefinition);
 }
 
-export async function getDestinyStatDefinitionFromStore(): Promise<DestinyStatDefinition> {
+export async function getDestinyStatDefinitionFromStore(): Promise<{ [key: number]: DestinyStatDefinition }> {
   return await get('DestinyStatDefinition');
 }
 
-export async function getDestinyInventoryItemDefinitionFromStore(): Promise<DestinyInventoryItemDefinition> {
+export async function getDestinyInventoryItemDefinitionFromStore(): Promise<{
+  [key: number]: DestinyInventoryItemDefinition;
+}> {
   return await get('DestinyInventoryItemDefinition');
 }

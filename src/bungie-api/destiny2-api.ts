@@ -1,11 +1,16 @@
 import {
+  BungieMembershipType,
+  DestinyClass,
+  DestinyComponentType,
   DestinyManifest,
   DestinyManifestSlice,
   DestinyProfileResponse,
+  DestinyVendorsResponse,
   getDestinyManifest,
   getDestinyManifestSlice,
   getLinkedProfiles,
   getProfile,
+  getVendors as getVendorsTs,
 } from 'bungie-api-ts/destiny2';
 import { $http, $httpAuthenticated } from '../helpers';
 import { MembershipInfo } from '../storage/Membership';
@@ -91,4 +96,56 @@ export async function getDestinyInventoryItemManifest(): Promise<
   });
   console.log({ manifestSlice });
   return manifestSlice;
+}
+
+export interface CharacterToId {
+  id: string;
+  classType: DestinyClass;
+}
+
+function mapCharacterIds(membershipInfo: MembershipInfo): CharacterToId[] {
+  const hunterId = membershipInfo.hunterId;
+  const titanId = membershipInfo.titanId;
+  const warlockId = membershipInfo.warlockId;
+
+  const value: CharacterToId[] = [];
+
+  if (titanId) value.push({ id: titanId, classType: 0 });
+  if (hunterId) value.push({ id: hunterId, classType: 1 });
+  if (warlockId) value.push({ id: warlockId, classType: 2 });
+  return value;
+}
+
+export async function getVendorsForAllCharacters(membershipInfo: MembershipInfo) {
+  const characterIds = mapCharacterIds(membershipInfo);
+
+  console.time('getVendorsForAllCharacters');
+  console.timeLog('getVendorsForAllCharacters');
+
+  const fullResponse: { [key: number]: DestinyVendorsResponse } = {};
+  await Promise.all(
+    characterIds.map(async ({ id, classType }) => {
+      const response = await getVendors(id, membershipInfo.destinyMembershipId, membershipInfo.membershipType);
+      fullResponse[classType] = response;
+    }),
+  );
+
+  console.timeEnd('getVendorsForAllCharacters');
+
+  return fullResponse;
+}
+
+export async function getVendors(
+  characterId: string,
+  destinyMembershipId: string,
+  membershipType: BungieMembershipType,
+): Promise<DestinyVendorsResponse> {
+  const response = await getVendorsTs($httpAuthenticated, {
+    characterId,
+    components: [304, 402],
+    destinyMembershipId,
+    membershipType,
+  });
+
+  return response.Response;
 }

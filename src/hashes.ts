@@ -3,27 +3,28 @@ export interface Dictionary<T> {
 }
 
 export const classHashMap: Dictionary<string> = {
-  Titan: '3655393761',
+  '3655393761': 'Titan',
   '671679327': 'Hunter',
   '2271682572': 'Warlock',
 };
 
 export const vendorHashes: Dictionary<string> = {
-  '350061650': 'Ada-1',
-  '396892126': 'Devrim',
-  '248695599': 'Drifter',
-  '1576276905': 'Failsafe',
-  '3603221665': 'Shaxx',
-  '69482069': 'Zavala',
+  350061650: 'Ada-1',
+  396892126: 'Devrim',
+  248695599: 'Drifter',
+  1576276905: 'Failsafe',
+  3603221665: 'Shaxx',
+  69482069: 'Zavala',
+  2190858386: 'Xur',
 };
 
 export const statHashes: Dictionary<string> = {
-  Intellect: '144602215',
-  Resilience: '392767087',
-  Discipline: '1735777505',
-  Recovery: '1943323491',
-  Mobility: '2996146975',
-  Strength: '4244567218',
+  2996146975: 'Mobility',
+  392767087: 'Resilience',
+  1943323491: 'Recovery',
+  1735777505: 'Discipline',
+  144602215: 'Intellect',
+  4244567218: 'Strength',
 };
 
 export const armorTypes: Dictionary<string> = {

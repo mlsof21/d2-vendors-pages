@@ -144,6 +144,7 @@ export function getAccessTokenFromRefreshToken(refreshToken: Token): Promise<Tok
       }),
   );
 }
+
 function hasTokenExpired(token?: Token): boolean {
   if (!token) return true;
 

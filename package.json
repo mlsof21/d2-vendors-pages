@@ -13,6 +13,7 @@
     "@types/react-router-dom": "^5.3.2",
     "bungie-api-ts": "^4.11.0",
     "classnames": "^2.3.1",
+    "env-cmd": "^10.1.0",
     "idb": "^7.0.0",
     "node-sass": "^6.0.1",
     "react": "^17.0.2",
@@ -31,7 +32,7 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "prettify": "prettier src/**/*.ts --write",
-    "predeploy": "npm run build",
+    "predeploy": "env-cmd -f .env.production npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
