@@ -119,9 +119,6 @@ function mapCharacterIds(membershipInfo: MembershipInfo): CharacterToId[] {
 export async function getVendorsForAllCharacters(membershipInfo: MembershipInfo) {
   const characterIds = mapCharacterIds(membershipInfo);
 
-  console.time('getVendorsForAllCharacters');
-  console.timeLog('getVendorsForAllCharacters');
-
   const fullResponse: { [key: number]: DestinyVendorsResponse } = {};
   await Promise.all(
     characterIds.map(async ({ id, classType }) => {
@@ -129,8 +126,6 @@ export async function getVendorsForAllCharacters(membershipInfo: MembershipInfo)
       fullResponse[classType] = response;
     }),
   );
-
-  console.timeEnd('getVendorsForAllCharacters');
 
   return fullResponse;
 }

@@ -8,13 +8,8 @@ export async function getScorableItems(allVendors: { [key: number]: DestinyVendo
 
   const classTypes = Object.keys(allVendors).map((x) => parseInt(x));
 
-  console.time('getDestinyInventoryItemDefinitionFromStore');
-  console.timeLog('getDestinyInventoryItemDefinitionFromStore');
   const d2inventoryItems = await getDestinyInventoryItemDefinitionFromStore();
-  console.timeEnd('getDestinyInventoryItemDefinitionFromStore');
 
-  console.time('getScorableItems');
-  console.timeLog('getScorableItems');
   for (const classType of classTypes) {
     classToArmor[classType] = {};
     const vendorIds = Object.keys(vendorHashes).map((x) => parseInt(x));
@@ -22,7 +17,6 @@ export async function getScorableItems(allVendors: { [key: number]: DestinyVendo
       classToArmor[classType][vendorId] = await getArmor(allVendors[classType], vendorId, d2inventoryItems);
     }
   }
-  console.timeEnd('getScorableItems');
 
   return classToArmor;
 }
@@ -69,8 +63,6 @@ async function getArmor(
 ): Promise<SaleArmor> {
   const armor: SaleArmor = {};
 
-  console.time(`getArmor ${vendorHash}`);
-  console.timeLog(`getArmor ${vendorHash}`);
   if (vendors.sales.data) {
     const saleItemsKeys = Object.keys(vendors.sales.data[vendorHash].saleItems).map((x) => parseInt(x));
     const saleItems = vendors.sales.data[vendorHash].saleItems;
@@ -83,7 +75,6 @@ async function getArmor(
       }
     }
   }
-  console.timeEnd(`getArmor ${vendorHash}`);
 
   return armor;
 }

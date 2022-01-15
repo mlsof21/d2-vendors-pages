@@ -10,7 +10,7 @@ function Login(): ReactElement {
   const onSuccess = async (response: any) => {
     const code = response.code;
     await getAccessTokenFromCode(code);
-    history.push('/');
+    history.push('/vendors');
   };
 
   const onFailure = (response: Response) => console.log(response);

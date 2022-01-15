@@ -34,7 +34,7 @@ export async function storeManifest(
   manifest: DestinyManifestSlice<['DestinyInventoryItemDefinition', 'DestinyStatDefinition']>,
 ): Promise<void> {
   await set('DestinyInventoryItemDefinition', manifest.DestinyInventoryItemDefinition);
-  await set('DestinyStatDefinition', manifest.DestinyStatDefinition);
+  // await set('DestinyStatDefinition', manifest.DestinyStatDefinition);
 }
 
 export async function getDestinyStatDefinitionFromStore(): Promise<{ [key: number]: DestinyStatDefinition }> {

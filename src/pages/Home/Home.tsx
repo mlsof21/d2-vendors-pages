@@ -1,4 +1,3 @@
-import { DestinyStatDefinition } from 'bungie-api-ts/destiny2';
 import { ReactElement, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getDestinyInventoryItemManifest, getMembershipInfo } from '../../bungie-api/destiny2-api';
@@ -14,6 +13,7 @@ import TokenStorage from '../../storage/Tokens';
 function Home(): ReactElement {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
+  const [spinnerText, setSpinnerText] = useState('Loading Destiny manifest');
 
   const tokenStorage = TokenStorage.getInstance();
   const membershipInfoStorage = MembershipInfoStorage.getInstance();
@@ -35,15 +35,15 @@ function Home(): ReactElement {
   }, []);
 
   async function getData() {
-    let d2StatDef = await getDestinyStatDefinitionFromStore();
-    let d2invItemDef = await getDestinyInventoryItemDefinitionFromStore();
+    const d2StatDef = await getDestinyStatDefinitionFromStore();
+    const d2invItemDef = await getDestinyInventoryItemDefinitionFromStore();
     if (!d2StatDef || !d2invItemDef) {
       const inventoryItemManifest = await getDestinyInventoryItemManifest();
+      setSpinnerText('Storing manifest');
       await storeManifest(inventoryItemManifest);
-      d2StatDef = await getDestinyStatDefinitionFromStore();
-      d2invItemDef = await getDestinyInventoryItemDefinitionFromStore();
     }
     if (!membershipInfo) {
+      setSpinnerText('Fetching Bungie Member Info');
       membershipInfo = await getMembershipInfo(membershipId);
       membershipInfoStorage.setMembershipInfo(JSON.stringify(membershipInfo));
     }
@@ -52,7 +52,7 @@ function Home(): ReactElement {
   }
 
   if (loading) {
-    return <Spinner text="Loading Destiny manifest" />;
+    return <Spinner text={spinnerText} noOverlay={true} />;
   }
 
   return <>This is the home page</>;

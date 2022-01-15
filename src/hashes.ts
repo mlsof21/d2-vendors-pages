@@ -20,8 +20,8 @@ export const vendorHashes: Dictionary<string> = {
   248695599: 'Drifter',
   1576276905: 'Failsafe',
   3603221665: 'Shaxx',
-  69482069: 'Zavala',
   2190858386: 'Xur',
+  69482069: 'Zavala',
 };
 
 export const statHashes: Dictionary<string> = {

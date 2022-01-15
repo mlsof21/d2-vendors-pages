@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import TokenStorage from '../../storage/Tokens';
 import './nav.scss';
 
-function Nav(): ReactElement {
-  const isAuthorized = TokenStorage.getInstance().getAllTokens();
+export interface NavProps {
+  isAuthorized: boolean;
+}
+
+function Nav(props: NavProps): ReactElement {
+  const { isAuthorized } = props;
+
   return (
     <div className="navbar">
-      <Link to="/">Home</Link>
       {!isAuthorized && <Link to="/login">Login</Link>}
       {isAuthorized && <Link to="/vendors">Vendors</Link>}
       {<Link to="/settings">Settings</Link>}
