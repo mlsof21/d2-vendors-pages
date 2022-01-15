@@ -88,39 +88,41 @@ function Vendors(): ReactElement {
         </label>
       )}
       {loading && <Spinner text={spinnerText} noOverlay={true} />}
-      {armorScores &&
-        orderedClassKeys.map((classKey) => (
-          <table key={classKey}>
-            <tr>
-              <th>{classTypeMap[classKey]}</th>
-              {orderedVendorKeys.map((vendorKey) => (
-                <th key={vendorKey}>{vendorHashes[vendorKey]}</th>
-              ))}
-            </tr>
+      <div className="vendorTable">
+        {armorScores &&
+          orderedClassKeys.map((classKey) => (
+            <table className="table--flip" key={classKey}>
+              <tr>
+                <th>{classTypeMap[classKey]}</th>
+                {orderedVendorKeys.map((vendorKey) => (
+                  <th key={vendorKey}>{vendorHashes[vendorKey]}</th>
+                ))}
+              </tr>
 
-            {Object.keys(armorTypes)
-              .map((x) => parseInt(x))
-              .map((armorType) => (
-                <tr key={armorType}>
-                  <th scope="row">{armorTypes[armorType]}</th>
-                  {orderedVendorKeys.map((vendorHash) => (
-                    <td
-                      key={vendorHash}
-                      style={{
-                        backgroundColor: showNormalized
-                          ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
-                          : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
-                      }}
-                    >
-                      {showNormalized
-                        ? armorScores[classKey][vendorHash][armorType].normalizedScore
-                        : armorScores[classKey][vendorHash][armorType].rawScore}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-          </table>
-        ))}
+              {Object.keys(armorTypes)
+                .map((x) => parseInt(x))
+                .map((armorType) => (
+                  <tr key={armorType}>
+                    <th scope="row">{armorTypes[armorType]}</th>
+                    {orderedVendorKeys.map((vendorHash) => (
+                      <td
+                        key={vendorHash}
+                        style={{
+                          backgroundColor: showNormalized
+                            ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
+                            : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
+                        }}
+                      >
+                        {showNormalized
+                          ? armorScores[classKey][vendorHash][armorType].normalizedScore
+                          : armorScores[classKey][vendorHash][armorType].rawScore}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </table>
+          ))}
+      </div>
     </div>
   );
 }

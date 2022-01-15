@@ -1,6 +1,5 @@
 import { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-import TokenStorage from '../../storage/Tokens';
 import './nav.scss';
 
 export interface NavProps {

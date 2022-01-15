@@ -5,7 +5,6 @@ import Nav from './components/Nav/Nav';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Login from './pages/Login/Login';
 import Callback from './pages/Callback/Callback';
-import Home from './pages/Home/Home';
 import Vendors from './pages/Vendors/Vendors';
 import Settings from './pages/Settings/Settings';
 import TokenStorage from './storage/Tokens';

@@ -28,7 +28,6 @@ function Settings(): ReactElement {
   const [saveButtonText, setSaveButtonText] = useState('Save Changes');
 
   const classes = Object.keys(classTypeMap);
-  const statKeys = ['Mobility', 'Resilience', 'Recovery', 'Discipline', 'Intellect', 'Strength'];
 
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
