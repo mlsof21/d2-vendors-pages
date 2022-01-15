@@ -1,8 +1,7 @@
 import { DestinyInventoryItemDefinition, DestinyStat, DestinyVendorsResponse } from 'bungie-api-ts/destiny2';
 import { armorTypes, statHashes as statHashesMap, vendorHashes } from '../hashes';
 import { getDestinyInventoryItemDefinitionFromStore } from '../storage/IndexedDB';
-
-const nameof = <T>(name: Extract<keyof T, string>): string => name;
+import { Colors, getColors, getScores } from './scoring';
 
 export async function getScorableItems(allVendors: { [key: number]: DestinyVendorsResponse }): Promise<ScorableItems> {
   const classToArmor: ScorableItems = {};
@@ -44,16 +43,8 @@ export interface SaleArmor {
     stats?: ArmorStats;
     rawScore?: number;
     normalizedScore?: number;
+    colors?: Colors;
   };
-}
-
-export interface Armor {
-  saleKey?: number;
-  itemHash?: number;
-  armorType?: string;
-  stats?: ArmorStats;
-  rawScore?: number;
-  normalizedScore?: number;
 }
 
 export class ArmorStats {
@@ -66,27 +57,6 @@ export class ArmorStats {
 
   constructor(init?: Partial<ArmorStats>) {
     Object.assign(this, init);
-  }
-}
-
-export class ArmorScoring {
-  public Mobility: number = 0;
-  public Resilience: number = 0;
-  public Recovery: number = 0;
-  public Discipline: number = 0;
-  public Intellect: number = 0;
-  public Strength: number = 0;
-
-  constructor(init?: Partial<ArmorScoring>) {
-    Object.assign(this, init);
-  }
-
-  getSortedSubGroup1(): number[] {
-    return [this.Mobility, this.Resilience, this.Recovery].sort((a, b) => b - a);
-  }
-
-  getSortedSubGroup2(): number[] {
-    return [this.Discipline, this.Intellect, this.Strength].sort((a, b) => b - a);
   }
 }
 
@@ -136,8 +106,10 @@ export async function getArmorScores(
           scorableItems[classType][vendorHash][itemSubType].stats = getStats(stats.stats);
 
           const scores = getScores(scorableItems[classType][vendorHash][itemSubType].stats!, parseInt(classType));
+          const colors = getColors(scores);
           scorableItems[classType][vendorHash][itemSubType].rawScore = scores.rawScore;
           scorableItems[classType][vendorHash][itemSubType].normalizedScore = scores.normalizedScore;
+          scorableItems[classType][vendorHash][itemSubType].colors = colors;
         }
       }
   }
@@ -173,64 +145,4 @@ function getStats(stats: { [key: number]: DestinyStat }): ArmorStats {
   }
 
   return armorStats;
-}
-
-function getScores(armorStats: ArmorStats, classType: number): { rawScore: number; normalizedScore: number } {
-  const scoring = getScoring(classType);
-  const rawScore = getRawScore(armorStats, scoring);
-  const normalizedScore = getNormalizedScore(rawScore, getTheoreticalMax(scoring));
-
-  return { rawScore, normalizedScore };
-}
-
-export function getRawScore(armorStats: ArmorStats, scoring: ArmorScoring): number {
-  let score = 0;
-  score += armorStats.Mobility * scoring.Mobility;
-  score += armorStats.Resilience * scoring.Resilience;
-  score += armorStats.Recovery * scoring.Recovery;
-  score += armorStats.Discipline * scoring.Discipline;
-  score += armorStats.Intellect * scoring.Intellect;
-  score += armorStats.Strength * scoring.Strength;
-  return score;
-}
-
-export function getNormalizedScore(score: number, theoreticalMax: number): number {
-  return Math.round((score / theoreticalMax) * 100);
-}
-
-function getScoring(classType: number): ArmorScoring {
-  switch (classType) {
-    case 0:
-      return getTitanScoring();
-    case 1:
-      return getHunterScoring();
-    case 2:
-      return getWarlockScoring();
-  }
-  return new ArmorScoring();
-}
-
-function getTitanScoring(): ArmorScoring {
-  return new ArmorScoring({ Recovery: 3, Discipline: 2, Resilience: 1 });
-}
-
-function getHunterScoring(): ArmorScoring {
-  return new ArmorScoring({ Recovery: 3, Discipline: 2, Mobility: 1 });
-}
-
-function getWarlockScoring(): ArmorScoring {
-  return new ArmorScoring({ Recovery: 3, Discipline: 3 });
-}
-
-export function getTheoreticalMax(armorScoring: ArmorScoring) {
-  const maxStatPossible = 30;
-  const minStatPossible = 2;
-
-  const sortedSubGroup1 = armorScoring.getSortedSubGroup1();
-  const sortedSubGroup2 = armorScoring.getSortedSubGroup2();
-
-  return (
-    maxStatPossible * (sortedSubGroup1[0] + sortedSubGroup2[0]) +
-    minStatPossible * (sortedSubGroup1[1] + sortedSubGroup1[2] + sortedSubGroup2[1] + sortedSubGroup2[2])
-  );
 }

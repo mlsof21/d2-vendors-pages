@@ -10,6 +10,7 @@ function Nav(): ReactElement {
       <Link to="/">Home</Link>
       {!isAuthorized && <Link to="/login">Login</Link>}
       {isAuthorized && <Link to="/vendors">Vendors</Link>}
+      {<Link to="/settings">Settings</Link>}
     </div>
   );
 }

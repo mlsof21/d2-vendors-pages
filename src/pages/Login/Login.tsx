@@ -6,11 +6,9 @@ import './login.scss';
 
 function Login(): ReactElement {
   const history = useHistory();
-  console.log('Using redirect', REDIRECT_URI);
 
   const onSuccess = async (response: any) => {
     const code = response.code;
-    console.log({ code });
     await getAccessTokenFromCode(code);
     history.push('/');
   };

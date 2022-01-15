@@ -7,6 +7,7 @@ import Login from './pages/Login/Login';
 import Callback from './pages/Callback/Callback';
 import Home from './pages/Home/Home';
 import Vendors from './pages/Vendors/Vendors';
+import Settings from './pages/Settings/Settings';
 
 function App(): ReactElement {
   const [loading, _] = useState(false);
@@ -18,6 +19,7 @@ function App(): ReactElement {
         <Route exact={true} path="/login" component={Login} />
         <Route exact={true} path="/vendors" component={Vendors} />
         <Route exact={true} path="/callback" component={Callback} />
+        <Route exact={true} path="/settings" component={Settings} />
         <Route exact={true} path="/" component={Home} />
         <Redirect to="/" />
       </Switch>

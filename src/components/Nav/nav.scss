@@ -1,16 +1,15 @@
 .navbar {
   background: #464a52;
-  padding: 1rem;
+  padding: 8px;
   text-align: left;
   a {
     display: inline-block;
-    background: #383841;
     text-decoration: none;
-    color: #6178fb;
-    margin: 0 0.5rem;
-    padding: 0.5rem;
+    color: #ffffff;
+    margin: 0 8px;
+    // padding: 0;
     &:hover {
-      background-color: #ccc;
+      color: rgb(216, 187, 20);
     }
   }
 }

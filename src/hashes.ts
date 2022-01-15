@@ -9,8 +9,8 @@ export const classHashMap: Dictionary<string> = {
 };
 
 export const classTypeMap: Dictionary<string> = {
-  1: 'Hunter',
   0: 'Titan',
+  1: 'Hunter',
   2: 'Warlock',
 };
 
