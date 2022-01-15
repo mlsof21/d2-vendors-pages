@@ -25,6 +25,7 @@ function Settings(): ReactElement {
       };
 
   const [settings, setSettings] = useState<{ [key: number]: ArmorScoring }>(initialScoring);
+  const [saveButtonText, setSaveButtonText] = useState('Save Changes');
 
   const classes = Object.keys(classTypeMap);
   const statKeys = ['Mobility', 'Resilience', 'Recovery', 'Discipline', 'Intellect', 'Strength'];
@@ -33,7 +34,9 @@ function Settings(): ReactElement {
     e.preventDefault();
 
     scoringStorage.setScoring(JSON.stringify(settings));
-    return;
+
+    setSaveButtonText('Saved!');
+    setTimeout(() => setSaveButtonText('Save Changes'), 2000);
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -127,52 +130,8 @@ function Settings(): ReactElement {
               </label>
             </div>
           ))}
-
-          {/* <div className="characterSettings">
-            <h3>Hunter</h3>
-            <label>
-              Mobility: <input type="number" name="1-Mobility" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Resilience: <input type="number" name="1-Resilience" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Recovery: <input type="number" name="1-Recovery" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Discipline: <input type="number" name="1-Discipline" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Intellect: <input type="number" name="1-Intellect" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Strength: <input type="number" name="1-Strength" onChange={handleInputChange} />{' '}
-            </label>
-          </div>
-
-          <div className="characterSettings">
-            <h3>Warlock</h3>
-            <label>
-              Mobility: <input type="number" name="2-Mobility" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Resilience: <input type="number" name="2-Resilience" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Recovery: <input type="number" name="2-Recovery" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Discipline: <input type="number" name="2-Discipline" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Intellect: <input type="number" name="2-Intellect" onChange={handleInputChange} />{' '}
-            </label>
-            <label>
-              Strength: <input type="number" name="2-Strength" onChange={handleInputChange} />{' '}
-            </label>
-          </div> */}
         </div>
-        <input type="submit" value="Save Changes" onChange={handleInputChange} />
+        <input type="submit" value={saveButtonText} onChange={handleInputChange} />
       </form>
     </>
   );
