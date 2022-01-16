@@ -75,6 +75,7 @@ function Settings(): ReactElement {
                   onChange={handleInputChange}
                   value={settings[parseInt(classType)].Mobility}
                   className="statInput"
+                  min="0"
                 />{' '}
               </label>
               <label>
@@ -85,6 +86,7 @@ function Settings(): ReactElement {
                   onChange={handleInputChange}
                   value={settings[parseInt(classType)].Resilience}
                   className="statInput"
+                  min="0"
                 />{' '}
               </label>
               <label>
@@ -95,6 +97,7 @@ function Settings(): ReactElement {
                   onChange={handleInputChange}
                   value={settings[parseInt(classType)].Recovery}
                   className="statInput"
+                  min="0"
                 />{' '}
               </label>
               <label>
@@ -105,6 +108,7 @@ function Settings(): ReactElement {
                   onChange={handleInputChange}
                   value={settings[parseInt(classType)].Discipline}
                   className="statInput"
+                  min="0"
                 />{' '}
               </label>
               <label>
@@ -115,6 +119,7 @@ function Settings(): ReactElement {
                   onChange={handleInputChange}
                   value={settings[parseInt(classType)].Intellect}
                   className="statInput"
+                  min="0"
                 />{' '}
               </label>
               <label>
@@ -125,6 +130,7 @@ function Settings(): ReactElement {
                   onChange={handleInputChange}
                   value={settings[parseInt(classType)].Strength}
                   className="statInput"
+                  min="0"
                 />{' '}
               </label>
             </div>

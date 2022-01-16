@@ -38,6 +38,7 @@ export interface SaleArmor {
     rawScore?: number;
     normalizedScore?: number;
     colors?: Colors;
+    theoreticalMax?: number;
   };
 }
 
@@ -101,6 +102,7 @@ export async function getArmorScores(
           scorableItems[classType][vendorHash][itemSubType].rawScore = scores.rawScore;
           scorableItems[classType][vendorHash][itemSubType].normalizedScore = scores.normalizedScore;
           scorableItems[classType][vendorHash][itemSubType].colors = colors;
+          scorableItems[classType][vendorHash][itemSubType].theoreticalMax = scores.theoreticalMax;
         }
       }
   }

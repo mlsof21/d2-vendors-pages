@@ -24,6 +24,7 @@ function Vendors(): ReactElement {
   const [spinnerText, setSpinnerText] = useState('Loading Destiny manifest');
   const [armorScores, setArmorScores] = useState<ScorableItems>();
   const [showNormalized, setShowNormalized] = useState(true);
+  const [classMaxes, setClassMaxes] = useState<{ [key: number]: number }>({ 0: 0, 1: 0, 2: 0 });
 
   const tokenStorage = TokenStorage.getInstance();
   const membershipInfoStorage = MembershipInfoStorage.getInstance();
@@ -69,12 +70,26 @@ function Vendors(): ReactElement {
 
       setSpinnerText('Scoring armor');
       const scores = await getArmorScores(scorableArmor, allVendors);
+      getCharacterMaxes(scores);
       setArmorScores(scores);
     }
     setLoading(false);
   }
 
   const handleCheckedChange = () => setShowNormalized(!showNormalized);
+
+  const getCharacterMaxes = (scores: ScorableItems) => {
+    const vendorHash = parseInt(Object.keys(scores[0])[0]);
+    const armorHash = 26;
+    const maxes: { [key: number]: number } = {};
+    for (let i = 0; i < 3; i++) {
+      if (scores[i][vendorHash][armorHash].theoreticalMax) {
+        maxes[i] = scores[i][vendorHash][armorHash].theoreticalMax!;
+      }
+    }
+
+    setClassMaxes(maxes);
+  };
 
   const orderedClassKeys = [1, 0, 2];
   const orderedVendorKeys = [350061650, 396892126, 248695599, 1576276905, 3603221665, 2190858386, 69482069];
@@ -83,7 +98,7 @@ function Vendors(): ReactElement {
     <div>
       {!loading && (
         <label>
-          Show Normalized Scores
+          Show Normalized Scores (0-100)
           <input type="checkbox" checked={showNormalized} onChange={handleCheckedChange} />
         </label>
       )}
@@ -93,7 +108,9 @@ function Vendors(): ReactElement {
           orderedClassKeys.map((classKey) => (
             <table className="table--flip" key={classKey}>
               <tr>
-                <th>{classTypeMap[classKey]}</th>
+                <th>
+                  {classTypeMap[classKey]} {!showNormalized && `(${classMaxes[classKey]})`}
+                </th>
                 {orderedVendorKeys.map((vendorKey) => (
                   <th key={vendorKey}>{vendorHashes[vendorKey]}</th>
                 ))}
