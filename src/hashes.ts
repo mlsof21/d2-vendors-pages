@@ -36,6 +36,6 @@ export const statHashes: Dictionary<string> = {
 export const armorTypes: Dictionary<string> = {
   26: 'Helmet',
   27: 'Gauntlets',
-  28: 'Chest Armor',
-  29: 'Leg Armor',
+  28: 'Chest',
+  29: 'Legs',
 };

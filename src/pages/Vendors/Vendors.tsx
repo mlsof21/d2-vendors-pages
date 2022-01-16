@@ -124,6 +124,7 @@ function Vendors(): ReactElement {
                     {orderedVendorKeys.map((vendorHash) => (
                       <td
                         key={vendorHash}
+                        className="scoreCell"
                         style={{
                           backgroundColor: showNormalized
                             ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex

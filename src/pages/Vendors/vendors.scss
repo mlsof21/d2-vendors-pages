@@ -7,20 +7,25 @@ th {
   padding: 5px;
   font-weight: bold;
 }
-td {
+
+.scoreCell {
   padding: 5px;
   border: 2px solid white;
   text-align: center;
   font-weight: normal;
+
+  @media screen {
+  }
 }
 
 .vendorTable {
   padding-top: 10px;
 
-  // @media screen {
-  //   font-size: 10px;
-  // }
+  @media (max-width: 300px) {
+    font-size: 10px;
+  }
 }
+
 @media (max-width: 560px) {
   .table--flip {
     justify-content: center;
