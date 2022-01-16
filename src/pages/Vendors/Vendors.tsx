@@ -5,8 +5,9 @@ import {
   getMembershipInfo,
   getVendorsForAllCharacters,
 } from '../../bungie-api/destiny2-api';
+import ScoreCell from '../../components/ScoreCell/ScoreCell';
 import Spinner from '../../components/Spinner/Spinner';
-import { armorTypes, classTypeMap, vendorHashes } from '../../hashes';
+import { armorTypes, classTypeMap, vendorHashes, orderedClassKeys as classKeys } from '../../hashes';
 import { getArmorScores, getScorableItems as getScorableArmor, ScorableItems } from '../../scoring/items';
 import {
   getDestinyInventoryItemDefinitionFromStore,
@@ -25,7 +26,7 @@ function Vendors(): ReactElement {
   const [armorScores, setArmorScores] = useState<ScorableItems>();
   const [showNormalized, setShowNormalized] = useState(true);
   const [classMaxes, setClassMaxes] = useState<{ [key: number]: number }>({ 0: 0, 1: 0, 2: 0 });
-  const [orderedClassKeys, setOrderedClassKeys] = useState([1, 0, 2]);
+  const [orderedClassKeys, setOrderedClassKeys] = useState([...classKeys]);
   const [orderedVendorKeys, setOrderedVendorKeys] = useState([
     350061650, 396892126, 248695599, 1576276905, 3603221665, 2190858386, 69482069,
   ]);
@@ -138,19 +139,20 @@ function Vendors(): ReactElement {
                       <th scope="row">{armorTypes[armorType]}</th>
                       {orderedVendorKeys.map((vendorHash) => {
                         return (
-                          <td
+                          <ScoreCell
                             key={vendorHash}
-                            className="scoreCell"
-                            style={{
-                              backgroundColor: showNormalized
+                            color={
+                              showNormalized
                                 ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
-                                : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
-                            }}
-                          >
-                            {showNormalized
-                              ? armorScores[classKey][vendorHash][armorType].normalizedScore
-                              : armorScores[classKey][vendorHash][armorType].rawScore}
-                          </td>
+                                : armorScores[classKey][vendorHash][armorType].colors?.colorHex
+                            }
+                            score={
+                              showNormalized
+                                ? armorScores[classKey][vendorHash][armorType].normalizedScore
+                                : armorScores[classKey][vendorHash][armorType].rawScore
+                            }
+                            armorInfo={armorScores[classKey][vendorHash][armorType]}
+                          />
                         );
                       })}
                     </tr>

@@ -62,8 +62,8 @@ export function getNormalizedScore(score: number, theoreticalMin: number, theore
 
 export function getColors(score: Score): Colors {
   const gradient = tinygradient(['#FF0000', '#00FF00']);
-  const colorsRgb = gradient.rgb(score.theoreticalMax > 0 ? score.theoreticalMax : 1);
-  const colorHex = colorsRgb[score.rawScore].toHexString();
+  const colorsRgb = gradient.rgb(score.theoreticalMax > 0 ? score.theoreticalMax - score.theoreticalMin : 1);
+  const colorHex = colorsRgb[score.rawScore - score.theoreticalMin - 1].toHexString();
   const colorsRgbNormalized = gradient.rgb(100);
   const normalizedColorHex = colorsRgbNormalized[score.normalizedScore - 1].toHexString();
 
@@ -118,6 +118,10 @@ export function getDefaultHunterScoring(): ArmorScoring {
 
 export function getDefaultWarlockScoring(): ArmorScoring {
   return new ArmorScoring({ Recovery: 3, Discipline: 3 });
+}
+
+export function getDefaultScoring(): ArmorScoring {
+  return new ArmorScoring({ Mobility: 1, Resilience: 1, Recovery: 1, Discipline: 1, Intellect: 1, Strength: 1 });
 }
 
 export function getTheoreticalMin(armorScoring: ArmorScoring): number {

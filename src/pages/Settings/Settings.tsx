@@ -1,11 +1,6 @@
 import React, { ReactElement, useState } from 'react';
-import { classTypeMap } from '../../hashes';
-import {
-  ArmorScoring,
-  getDefaultHunterScoring,
-  getDefaultTitanScoring,
-  getDefaultWarlockScoring,
-} from '../../scoring/scoring';
+import { classTypeMap, orderedClassKeys } from '../../hashes';
+import { ArmorScoring, getDefaultScoring } from '../../scoring/scoring';
 import ScoringStorage from '../../storage/Scoring';
 import './settings.scss';
 
@@ -19,15 +14,15 @@ function Settings(): ReactElement {
         2: new ArmorScoring(storedScoring[2]),
       }
     : {
-        0: getDefaultTitanScoring(),
-        1: getDefaultHunterScoring(),
-        2: getDefaultWarlockScoring(),
+        0: getDefaultScoring(),
+        1: getDefaultScoring(),
+        2: getDefaultScoring(),
       };
 
   const [settings, setSettings] = useState<{ [key: number]: ArmorScoring }>(initialScoring);
   const [saveButtonText, setSaveButtonText] = useState('Save Changes');
 
-  const classes = Object.keys(classTypeMap);
+  const classes = [...orderedClassKeys];
 
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
@@ -54,6 +49,14 @@ function Settings(): ReactElement {
     console.log(`changing ${name} to ${value}`);
   }
 
+  function handleResetClick() {
+    setSettings({
+      0: getDefaultScoring(),
+      1: getDefaultScoring(),
+      2: getDefaultScoring(),
+    });
+  }
+
   return (
     <>
       <h2>Scoring Settings</h2>
@@ -73,7 +76,7 @@ function Settings(): ReactElement {
                   type="number"
                   name={`${classType}-Mobility`}
                   onChange={handleInputChange}
-                  value={settings[parseInt(classType)].Mobility}
+                  value={settings[classType].Mobility}
                   className="statInput"
                   min="0"
                 />{' '}
@@ -84,7 +87,7 @@ function Settings(): ReactElement {
                   type="number"
                   name={`${classType}-Resilience`}
                   onChange={handleInputChange}
-                  value={settings[parseInt(classType)].Resilience}
+                  value={settings[classType].Resilience}
                   className="statInput"
                   min="0"
                 />{' '}
@@ -95,7 +98,7 @@ function Settings(): ReactElement {
                   type="number"
                   name={`${classType}-Recovery`}
                   onChange={handleInputChange}
-                  value={settings[parseInt(classType)].Recovery}
+                  value={settings[classType].Recovery}
                   className="statInput"
                   min="0"
                 />{' '}
@@ -106,7 +109,7 @@ function Settings(): ReactElement {
                   type="number"
                   name={`${classType}-Discipline`}
                   onChange={handleInputChange}
-                  value={settings[parseInt(classType)].Discipline}
+                  value={settings[classType].Discipline}
                   className="statInput"
                   min="0"
                 />{' '}
@@ -117,7 +120,7 @@ function Settings(): ReactElement {
                   type="number"
                   name={`${classType}-Intellect`}
                   onChange={handleInputChange}
-                  value={settings[parseInt(classType)].Intellect}
+                  value={settings[classType].Intellect}
                   className="statInput"
                   min="0"
                 />{' '}
@@ -128,7 +131,7 @@ function Settings(): ReactElement {
                   type="number"
                   name={`${classType}-Strength`}
                   onChange={handleInputChange}
-                  value={settings[parseInt(classType)].Strength}
+                  value={settings[classType].Strength}
                   className="statInput"
                   min="0"
                 />{' '}
@@ -136,6 +139,7 @@ function Settings(): ReactElement {
             </div>
           ))}
         </div>
+        <input type="button" value="Clear Scoring" onClick={handleResetClick} />
         <input type="submit" value={saveButtonText} onChange={handleInputChange} />
       </form>
     </>

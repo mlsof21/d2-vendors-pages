@@ -34,16 +34,18 @@ export interface VendorArmor {
 }
 
 export interface SaleArmor {
-  [armorType: number]: {
-    saleKey?: number;
-    itemHash?: number;
-    armorType?: string;
-    stats?: ArmorStats;
-    rawScore?: number;
-    normalizedScore?: number;
-    colors?: Colors;
-    theoreticalMax?: number;
-  };
+  [armorType: number]: Armor;
+}
+
+export interface Armor {
+  saleKey?: number;
+  itemHash?: number;
+  armorType?: string;
+  stats?: ArmorStats;
+  rawScore?: number;
+  normalizedScore?: number;
+  colors?: Colors;
+  theoreticalMax?: number;
 }
 
 export class ArmorStats {

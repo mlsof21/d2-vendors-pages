@@ -9,10 +9,12 @@ export const classHashMap: Dictionary<string> = {
 };
 
 export const classTypeMap: Dictionary<string> = {
-  0: 'Titan',
   1: 'Hunter',
+  0: 'Titan',
   2: 'Warlock',
 };
+
+export const orderedClassKeys = [1, 0, 2];
 
 export const vendorHashes: Dictionary<string> = {
   350061650: 'Ada-1',
