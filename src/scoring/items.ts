@@ -12,7 +12,11 @@ export async function getScorableItems(allVendors: { [key: number]: DestinyVendo
 
   for (const classType of classTypes) {
     classToArmor[classType] = {};
-    const vendorIds = Object.keys(vendorHashes).map((x) => parseInt(x));
+
+    const availableVendorIds = Object.keys(allVendors[classType].itemComponents).map((x) => parseInt(x));
+    const vendorIds = Object.keys(vendorHashes)
+      .map((x) => parseInt(x))
+      .filter((x) => availableVendorIds.includes(x));
     for (const vendorId of vendorIds) {
       classToArmor[classType][vendorId] = await getArmor(allVendors[classType], vendorId, d2inventoryItems);
     }

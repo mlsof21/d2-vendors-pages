@@ -25,6 +25,10 @@ function Vendors(): ReactElement {
   const [armorScores, setArmorScores] = useState<ScorableItems>();
   const [showNormalized, setShowNormalized] = useState(true);
   const [classMaxes, setClassMaxes] = useState<{ [key: number]: number }>({ 0: 0, 1: 0, 2: 0 });
+  const [orderedClassKeys, setOrderedClassKeys] = useState([1, 0, 2]);
+  const [orderedVendorKeys, setOrderedVendorKeys] = useState([
+    350061650, 396892126, 248695599, 1576276905, 3603221665, 2190858386, 69482069,
+  ]);
 
   const tokenStorage = TokenStorage.getInstance();
   const membershipInfoStorage = MembershipInfoStorage.getInstance();
@@ -71,6 +75,8 @@ function Vendors(): ReactElement {
       setSpinnerText('Scoring armor');
       const scores = await getArmorScores(scorableArmor, allVendors);
       getCharacterMaxes(scores);
+      handleMissingKeys(scores);
+
       setArmorScores(scores);
     }
     setLoading(false);
@@ -83,16 +89,24 @@ function Vendors(): ReactElement {
     const armorHash = 26;
     const maxes: { [key: number]: number } = {};
     for (let i = 0; i < 3; i++) {
-      if (scores[i][vendorHash][armorHash].theoreticalMax) {
-        maxes[i] = scores[i][vendorHash][armorHash].theoreticalMax!;
+      if (i in scores) {
+        if (scores[i][vendorHash][armorHash].theoreticalMax) {
+          maxes[i] = scores[i][vendorHash][armorHash].theoreticalMax!;
+        }
       }
     }
 
     setClassMaxes(maxes);
   };
 
-  const orderedClassKeys = [1, 0, 2];
-  const orderedVendorKeys = [350061650, 396892126, 248695599, 1576276905, 3603221665, 2190858386, 69482069];
+  const handleMissingKeys = (scores: ScorableItems) => {
+    const classes = Object.keys(scores).map((x) => parseInt(x));
+    const filteredClasses = orderedClassKeys.filter((x) => classes.includes(x));
+    setOrderedClassKeys([...filteredClasses]);
+    const vendors = Object.keys(scores[filteredClasses[0]]).map((x) => parseInt(x));
+    const filteredVendors = orderedVendorKeys.filter((x) => vendors.includes(x));
+    setOrderedVendorKeys([...filteredVendors]);
+  };
 
   return (
     <div>
@@ -121,21 +135,23 @@ function Vendors(): ReactElement {
                 .map((armorType) => (
                   <tr key={armorType}>
                     <th scope="row">{armorTypes[armorType]}</th>
-                    {orderedVendorKeys.map((vendorHash) => (
-                      <td
-                        key={vendorHash}
-                        className="scoreCell"
-                        style={{
-                          backgroundColor: showNormalized
-                            ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
-                            : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
-                        }}
-                      >
-                        {showNormalized
-                          ? armorScores[classKey][vendorHash][armorType].normalizedScore
-                          : armorScores[classKey][vendorHash][armorType].rawScore}
-                      </td>
-                    ))}
+                    {orderedVendorKeys.map((vendorHash) => {
+                      return (
+                        <td
+                          key={vendorHash}
+                          className="scoreCell"
+                          style={{
+                            backgroundColor: showNormalized
+                              ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
+                              : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
+                          }}
+                        >
+                          {showNormalized
+                            ? armorScores[classKey][vendorHash][armorType].normalizedScore
+                            : armorScores[classKey][vendorHash][armorType].rawScore}
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))}
             </table>
