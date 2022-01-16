@@ -51,8 +51,6 @@ export async function $httpAuthenticated(config: HttpClientConfig): Promise<Resp
     }
     url = `${url}?${new URLSearchParams(config.params as Record<string, string>).toString()}`;
   }
-  console.log('Creating http client', { token });
-  console.log('Fetching from', config.url, 'with headers', headers, 'body', config.body, 'params', config.params);
 
   return fetch(url, {
     method: config.method,

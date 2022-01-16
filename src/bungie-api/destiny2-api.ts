@@ -16,7 +16,6 @@ import { $http, $httpAuthenticated } from '../helpers';
 import { MembershipInfo } from '../storage/Membership';
 
 export async function getMembershipInfo(membershipId: string): Promise<MembershipInfo> {
-  console.log('Fetching membership info', membershipId);
   const linkedProfiles = await getLinkedProfiles($httpAuthenticated, {
     membershipId,
     membershipType: 254,
@@ -94,7 +93,6 @@ export async function getDestinyInventoryItemManifest(): Promise<
     language: 'en',
     tableNames: ['DestinyInventoryItemDefinition', 'DestinyStatDefinition'],
   });
-  console.log({ manifestSlice });
   return manifestSlice;
 }
 
