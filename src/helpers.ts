@@ -6,7 +6,8 @@ export const CLIENT_ID = process.env.REACT_APP_BUNGIE_CLIENT_ID || '';
 export const CLIENT_SECRET = process.env.REACT_APP_BUNGIE_CLIENT_SECRET || '';
 export const REDIRECT_URI = process.env.REACT_APP_BUNGIE_REDIRECT_URI || '';
 
-export const bungieApiRoot = 'https://www.bungie.net/Platform';
+export const BUNGIE_ROOT = 'https://www.bungie.net';
+export const BUNGIE_API_ROOT = `${BUNGIE_ROOT}/Platform`;
 
 export async function getActiveToken(): Promise<Tokens> {
   const allTokens = TokenStorage.getInstance().getAllTokens();
@@ -73,7 +74,7 @@ export function getAccessTokenFromCode(code: string): Promise<void> {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
   });
-  return fetch(`${bungieApiRoot}/app/oauth/token/`, { method: 'POST', body })
+  return fetch(`${BUNGIE_API_ROOT}/app/oauth/token/`, { method: 'POST', body })
     .then((res) => res.json())
     .then(handleAccessToken)
     .then((tokens) => TokenStorage.getInstance().setAllTokens(tokens));
@@ -129,7 +130,7 @@ export function getAccessTokenFromRefreshToken(refreshToken: Token): Promise<Tok
   });
 
   return Promise.resolve(
-    fetch(`${bungieApiRoot}/app/oauth/token/`, {
+    fetch(`${BUNGIE_API_ROOT}/app/oauth/token/`, {
       method: 'POST',
       body,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

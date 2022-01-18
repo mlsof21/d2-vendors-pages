@@ -1,0 +1,16 @@
+.stat {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.statLabel {
+  flex: 1;
+  text-align: right;
+  padding-right: 5px;
+}
+
+.statValue {
+  text-align: right;
+  width: 10%;
+}

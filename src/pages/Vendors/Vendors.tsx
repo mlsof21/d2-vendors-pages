@@ -1,14 +1,15 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   getDestinyInventoryItemManifest,
   getMembershipInfo,
   getVendorsForAllCharacters,
 } from '../../bungie-api/destiny2-api';
+import ItemPopup from '../../components/ItemPopup/ItemPopup';
 import ScoreCell from '../../components/ScoreCell/ScoreCell';
 import Spinner from '../../components/Spinner/Spinner';
 import { armorTypes, classTypeMap, vendorHashes, orderedClassKeys as classKeys } from '../../hashes';
-import { getArmorScores, getScorableItems as getScorableArmor, ScorableItems } from '../../scoring/items';
+import { Armor, getArmorScores, getScorableItems as getScorableArmor, ScorableItems } from '../../scoring/items';
 import {
   getDestinyInventoryItemDefinitionFromStore,
   getDestinyStatDefinitionFromStore,
@@ -17,6 +18,11 @@ import {
 import MembershipInfoStorage from '../../storage/Membership';
 import TokenStorage from '../../storage/Tokens';
 import './vendors.scss';
+
+export interface Position {
+  top: number;
+  left: number;
+}
 
 function Vendors(): ReactElement {
   const history = useHistory();
@@ -30,6 +36,9 @@ function Vendors(): ReactElement {
   const [orderedVendorKeys, setOrderedVendorKeys] = useState([
     350061650, 396892126, 248695599, 1576276905, 3603221665, 2190858386, 69482069,
   ]);
+  const [showItemPopup, setShowItemPopup] = useState(false);
+  const [itemPopupInfo, setItemPopupInfo] = useState({});
+  const [pos, setPos] = useState<Position>({ top: 0, left: 0 });
 
   const tokenStorage = TokenStorage.getInstance();
   const membershipInfoStorage = MembershipInfoStorage.getInstance();
@@ -84,6 +93,12 @@ function Vendors(): ReactElement {
   }
 
   const handleCheckedChange = () => setShowNormalized(!showNormalized);
+  const handleCellClicked = (event: React.MouseEvent<HTMLButtonElement>, armorInfo: Armor) => {
+    setShowItemPopup(!showItemPopup);
+    setItemPopupInfo(armorInfo);
+    setPos({ top: event.pageY, left: event.pageX });
+    console.log(`Clicked item hash ${armorInfo.itemHash}`);
+  };
 
   const getCharacterMaxes = (scores: ScorableItems) => {
     const vendorHash = parseInt(Object.keys(scores[0])[0]);
@@ -139,20 +154,25 @@ function Vendors(): ReactElement {
                       <th scope="row">{armorTypes[armorType]}</th>
                       {orderedVendorKeys.map((vendorHash) => {
                         return (
-                          <ScoreCell
+                          <td
+                            className="scoreCell"
                             key={vendorHash}
-                            color={
-                              showNormalized
+                            style={{
+                              backgroundColor: showNormalized
                                 ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
-                                : armorScores[classKey][vendorHash][armorType].colors?.colorHex
-                            }
-                            score={
-                              showNormalized
+                                : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
+                            }}
+                          >
+                            <button
+                              onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                                handleCellClicked(event, armorScores[classKey][vendorHash][armorType])
+                              }
+                            >
+                              {showNormalized
                                 ? armorScores[classKey][vendorHash][armorType].normalizedScore
-                                : armorScores[classKey][vendorHash][armorType].rawScore
-                            }
-                            armorInfo={armorScores[classKey][vendorHash][armorType]}
-                          />
+                                : armorScores[classKey][vendorHash][armorType].rawScore}
+                            </button>
+                          </td>
                         );
                       })}
                     </tr>
@@ -160,6 +180,15 @@ function Vendors(): ReactElement {
               </tbody>
             </table>
           ))}
+        <ItemPopup
+          armorInfo={itemPopupInfo}
+          show={showItemPopup}
+          onClickOutside={() => {
+            setShowItemPopup(false);
+          }}
+          top={pos.top}
+          left={pos.left}
+        />
       </div>
     </div>
   );

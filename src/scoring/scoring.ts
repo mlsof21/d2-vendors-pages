@@ -57,15 +57,15 @@ export function getRawScore(armorStats: ArmorStats, scoring: ArmorScoring): numb
 }
 
 export function getNormalizedScore(score: number, theoreticalMin: number, theoreticalMax: number): number {
-  return Math.round(((score - theoreticalMin) / (theoreticalMax - theoreticalMin)) * 100);
+  return Math.round(((score - theoreticalMin) / Math.max(theoreticalMax - theoreticalMin, 1)) * 100);
 }
 
 export function getColors(score: Score): Colors {
   const gradient = tinygradient(['#FF0000', '#00FF00']);
-  const colorsRgb = gradient.rgb(score.theoreticalMax > 0 ? score.theoreticalMax - score.theoreticalMin : 1);
-  const colorHex = colorsRgb[score.rawScore - score.theoreticalMin - 1].toHexString();
+  const colorsRgb = gradient.rgb(Math.max(score.theoreticalMax - score.theoreticalMin, 2));
+  const colorHex = colorsRgb[Math.max(score.rawScore - score.theoreticalMin - 1, 0)].toHexString();
   const colorsRgbNormalized = gradient.rgb(100);
-  const normalizedColorHex = colorsRgbNormalized[score.normalizedScore - 1].toHexString();
+  const normalizedColorHex = colorsRgbNormalized[Math.max(score.normalizedScore - 1, 0)].toHexString();
 
   return { colorHex, normalizedColorHex };
 }
@@ -133,7 +133,6 @@ export function getTheoreticalMin(armorScoring: ArmorScoring): number {
   const plugs = [
     [2, 10, 10],
     [2, 2, 20],
-    [2, 6, 16],
   ];
 
   let min = Number.MAX_VALUE;

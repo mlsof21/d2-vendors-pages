@@ -13,6 +13,7 @@ th {
   border: 2px solid white;
   text-align: center;
   font-weight: normal;
+  color: #ffffff;
 
   @media screen {
   }
@@ -71,4 +72,12 @@ th {
   .table--flip td:not(:last-child) {
     border-bottom: 0;
   }
+}
+
+td > button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: inherit;
+  font-family: inherit;
 }

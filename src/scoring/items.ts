@@ -1,5 +1,6 @@
 import { DestinyInventoryItemDefinition, DestinyStat, DestinyVendorsResponse } from 'bungie-api-ts/destiny2';
 import { armorTypes, statHashes as statHashesMap, vendorHashes } from '../hashes';
+import { BUNGIE_ROOT } from '../helpers';
 import { getDestinyInventoryItemDefinitionFromStore } from '../storage/IndexedDB';
 import { Colors, getColors, getScores } from './scoring';
 
@@ -46,6 +47,9 @@ export interface Armor {
   normalizedScore?: number;
   colors?: Colors;
   theoreticalMax?: number;
+  iconPath?: string;
+  name?: string;
+  flavorText?: string;
 }
 
 export class ArmorStats {
@@ -77,8 +81,18 @@ async function getArmor(
       const itemHash = saleItems[saleItemKey].itemHash;
       const itemSubType = d2inventoryItems[itemHash].itemSubType;
       const summaryItemHash = d2inventoryItems[itemHash].summaryItemHash!;
+      const iconPath = `${BUNGIE_ROOT}${d2inventoryItems[itemHash].displayProperties.icon}`;
+      const name = d2inventoryItems[itemHash].displayProperties.name;
+      const flavorText = d2inventoryItems[itemHash].flavorText;
       if (isScorable(itemSubType) && summaryItemHash !== 715326750) {
-        armor[itemSubType] = { itemHash, saleKey: saleItemKey, armorType: armorTypes[itemSubType] };
+        armor[itemSubType] = {
+          itemHash,
+          saleKey: saleItemKey,
+          armorType: armorTypes[itemSubType],
+          iconPath,
+          name,
+          flavorText,
+        };
       }
     }
   }
