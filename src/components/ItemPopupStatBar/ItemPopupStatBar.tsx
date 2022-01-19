@@ -1,11 +1,11 @@
-import { ReactElement } from 'react';
+import { FC } from 'react';
 import './itemPopupStatBar.scss';
 
-export interface ItemPopupStatBarProps {
+type ItemPopupStatBarProps = {
   stat?: number;
-}
+};
 
-function ItemPopupStatBar({ stat }: ItemPopupStatBarProps): ReactElement {
+const ItemPopupStatBar = ({ stat }: ItemPopupStatBarProps) => {
   const parentDiv = {
     height: '100%',
     width: '100%',
@@ -33,6 +33,6 @@ function ItemPopupStatBar({ stat }: ItemPopupStatBarProps): ReactElement {
       </div>
     </div>
   );
-}
+};
 
 export default ItemPopupStatBar;

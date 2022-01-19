@@ -2,9 +2,9 @@
 
 Help() {
   #Display Help
-  echo "CreateReactElement"
+  echo "CreateReactComponent"
   echo
-  echo "Syntax: createReactElement.sh -n|--name {name} [-p|--page||-c|--component] [-h|--help]"
+  echo "Syntax: createReactComponent.sh -n|--name {name} [-p|--page||-c|--component] [-h|--help]"
   echo "options:"
   echo "n     Set the name of the page/component being created"
   echo "p     Create a page"
@@ -12,9 +12,9 @@ Help() {
   echo "h     Print this help"
 }
 
-tsxContents="import { ReactElement } from \"react\";
+tsxContents="import './{name}.scss';
 
-function {name}(): ReactElement {
+const {name} = () => {
   return <>This is the {name} page</>;
 }
 
@@ -23,12 +23,13 @@ export default {name};"
 testContents="import { render, screen } from '@testing-library/react';
 import {name} from './{name}';
 
+
 describe('{name}', () => {
   it('render {name}', () => {
     render(<{name} />);
-    const {lowername}Element = screen.getByText('This is the {name} page');
+    const {lowername}Component = screen.getByText('This is the {name} page');
 
-    expect({lowername}Element).toBeInTheDocument();
+    expect({lowername}Component).toBeInTheDocument();
   });
 });
 "
@@ -42,6 +43,7 @@ while getopts "n:pch" option; do
            exit;;
         \?) #invalid
           echo "Invalid option"
+          Help
           exit;;
     esac
 done
@@ -62,5 +64,5 @@ touch $basepath/${name,,}.scss
 
 echo "${tsxContents//\{name\}/"$name"}" > $basepath/$name.tsx
 
-testContents="${testContents//\{lowername\}/"${name,,}"}"
+testContents="${testContents//\{lowername\}/"$(tr [:lower:] ${name:0:1}")${name:1}"
 echo "${testContents//\{name\}/"$name"}" > $basepath/$name.test.tsx

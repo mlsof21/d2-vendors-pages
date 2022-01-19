@@ -1,16 +1,14 @@
 import classNames from 'classnames';
-import { ReactElement } from 'react';
+import { FC } from 'react';
 import './spinner.scss';
 
-export interface SpinnerDisplayProps {
+type SpinnerProps = {
   text?: string;
   noOverlay?: boolean;
   className?: string | string[];
-}
+};
 
-function Spinner(props: SpinnerDisplayProps): ReactElement {
-  const { text, noOverlay, className, ...rest } = props;
-
+const Spinner = ({ text, noOverlay, className, ...rest }: SpinnerProps) => {
   const classes = classNames('Spinner', noOverlay && 'Spinner--noOverlay', className);
 
   return (
@@ -23,6 +21,6 @@ function Spinner(props: SpinnerDisplayProps): ReactElement {
       {text ? <div className="Spinner-content">{text}</div> : null}
     </div>
   );
-}
+};
 
 export default Spinner;

@@ -1,10 +1,10 @@
-import { ReactElement } from 'react';
+import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import OAuth2Login from 'react-simple-oauth2-login';
 import { CLIENT_ID, getAccessTokenFromCode, REDIRECT_URI } from '../../helpers';
 import './login.scss';
 
-function Login(): ReactElement {
+const Login = () => {
   const history = useHistory();
 
   const onSuccess = async (response: any) => {
@@ -27,6 +27,6 @@ function Login(): ReactElement {
       className="loginButton"
     />
   );
-}
+};
 
 export default Login;

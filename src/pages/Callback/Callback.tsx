@@ -1,12 +1,12 @@
-import { ReactElement } from 'react';
+import { FC } from 'react';
 import { useQuery } from '../../hooks';
 
-function Callback(): ReactElement {
+const Callback = () => {
   const query = useQuery();
 
   const authCode = query.get('code');
 
   return <>{!authCode && <>{authCode}</>}</>;
-}
+};
 
 export default Callback;

@@ -1,10 +1,10 @@
-import React, { ReactElement, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { classTypeMap, orderedClassKeys } from '../../hashes';
 import { ArmorScoring, getDefaultScoring } from '../../scoring/scoring';
 import ScoringStorage from '../../storage/Scoring';
 import './settings.scss';
 
-function Settings(): ReactElement {
+const Settings = () => {
   const scoringStorage = ScoringStorage.getInstance();
   const storedScoring = scoringStorage.getScoring();
   const initialScoring = storedScoring
@@ -144,6 +144,6 @@ function Settings(): ReactElement {
       </form>
     </>
   );
-}
+};
 
 export default Settings;

@@ -1,13 +1,13 @@
-import { ReactElement } from 'react';
+import { FC } from 'react';
 import { ArmorStats } from '../../scoring/items';
 import ItemPopupStatBar from '../ItemPopupStatBar/ItemPopupStatBar';
 import './itemPopupStats.scss';
 
-export interface ItemPopupStatsProps {
+type ItemPopupStatsProps = {
   armorStats?: ArmorStats;
-}
+};
 
-function ItemPopupStats({ armorStats }: ItemPopupStatsProps): ReactElement {
+const ItemPopupStats = ({ armorStats }: ItemPopupStatsProps) => {
   return (
     <div className="statsContainer">
       <div className="stat">
@@ -54,6 +54,6 @@ function ItemPopupStats({ armorStats }: ItemPopupStatsProps): ReactElement {
       </div>
     </div>
   );
-}
+};
 
 export default ItemPopupStats;

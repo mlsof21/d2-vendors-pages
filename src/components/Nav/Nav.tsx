@@ -1,14 +1,12 @@
-import { ReactElement } from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import './nav.scss';
 
-export interface NavProps {
+type NavProps = {
   isAuthorized: boolean;
-}
+};
 
-function Nav(props: NavProps): ReactElement {
-  const { isAuthorized } = props;
-
+const Nav = ({ isAuthorized }: NavProps) => {
   return (
     <div className="navbar">
       {!isAuthorized && <Link to="/login">Login</Link>}
@@ -16,6 +14,6 @@ function Nav(props: NavProps): ReactElement {
       {<Link to="/settings">Settings</Link>}
     </div>
   );
-}
+};
 
 export default Nav;

@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   getDestinyInventoryItemManifest,
@@ -6,7 +6,6 @@ import {
   getVendorsForAllCharacters,
 } from '../../bungie-api/destiny2-api';
 import ItemPopup from '../../components/ItemPopup/ItemPopup';
-import ScoreCell from '../../components/ScoreCell/ScoreCell';
 import Spinner from '../../components/Spinner/Spinner';
 import { armorTypes, classTypeMap, vendorHashes, orderedClassKeys as classKeys } from '../../hashes';
 import { Armor, getArmorScores, getScorableItems as getScorableArmor, ScorableItems } from '../../scoring/items';
@@ -24,7 +23,7 @@ export interface Position {
   left: number;
 }
 
-function Vendors(): ReactElement {
+const Vendors = () => {
   const history = useHistory();
 
   const [loading, setLoading] = useState(true);
@@ -192,6 +191,6 @@ function Vendors(): ReactElement {
       </div>
     </div>
   );
-}
+};
 
 export default Vendors;
