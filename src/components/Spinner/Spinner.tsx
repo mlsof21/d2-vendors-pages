@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { FC } from 'react';
 import './spinner.scss';
 
 type SpinnerProps = {

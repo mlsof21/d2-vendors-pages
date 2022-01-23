@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { classTypeMap, orderedClassKeys } from '../../hashes';
 import { ArmorScoring, getDefaultScoring } from '../../scoring/scoring';
 import ScoringStorage from '../../storage/Scoring';

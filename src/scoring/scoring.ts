@@ -28,6 +28,7 @@ export interface Score {
   normalizedScore: number;
   theoreticalMax: number;
   theoreticalMin: number;
+  scoredStats: string[];
 }
 
 export interface Colors {
@@ -37,12 +38,26 @@ export interface Colors {
 
 export function getScores(armorStats: ArmorStats, classType: number): Score {
   const scoring = getScoring(classType);
+  const scoredStats = getScoredStats(scoring);
   const rawScore = getRawScore(armorStats, scoring);
   const theoreticalMin = getTheoreticalMin(scoring);
   const theoreticalMax = getTheoreticalMax(scoring);
   const normalizedScore = getNormalizedScore(rawScore, theoreticalMin, theoreticalMax);
 
-  return { rawScore, normalizedScore, theoreticalMax, theoreticalMin };
+  return { rawScore, normalizedScore, theoreticalMax, theoreticalMin, scoredStats };
+}
+
+export function getScoredStats(scoring: ArmorScoring): string[] {
+  const scoredStats = [];
+
+  if (scoring.Mobility > 0) scoredStats.push('Mobility');
+  if (scoring.Resilience > 0) scoredStats.push('Resilience');
+  if (scoring.Recovery > 0) scoredStats.push('Recovery');
+  if (scoring.Discipline > 0) scoredStats.push('Discipline');
+  if (scoring.Intellect > 0) scoredStats.push('Intellect');
+  if (scoring.Strength > 0) scoredStats.push('Strength');
+
+  return scoredStats;
 }
 
 export function getRawScore(armorStats: ArmorStats, scoring: ArmorScoring): number {

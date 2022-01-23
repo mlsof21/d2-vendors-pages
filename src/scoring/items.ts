@@ -46,10 +46,11 @@ export interface Armor {
   rawScore?: number;
   normalizedScore?: number;
   colors?: Colors;
+  theoreticalMin?: number;
   theoreticalMax?: number;
   iconPath?: string;
   name?: string;
-  flavorText?: string;
+  scoredStats?: string[];
 }
 
 export class ArmorStats {
@@ -83,7 +84,6 @@ async function getArmor(
       const summaryItemHash = d2inventoryItems[itemHash].summaryItemHash!;
       const iconPath = `${BUNGIE_ROOT}${d2inventoryItems[itemHash].displayProperties.icon}`;
       const name = d2inventoryItems[itemHash].displayProperties.name;
-      const flavorText = d2inventoryItems[itemHash].flavorText;
       if (isScorable(itemSubType) && summaryItemHash !== 715326750) {
         armor[itemSubType] = {
           itemHash,
@@ -91,7 +91,6 @@ async function getArmor(
           armorType: armorTypes[itemSubType],
           iconPath,
           name,
-          flavorText,
         };
       }
     }
@@ -123,6 +122,8 @@ export async function getArmorScores(
           scorableItems[classType][vendorHash][itemSubType].normalizedScore = scores.normalizedScore;
           scorableItems[classType][vendorHash][itemSubType].colors = colors;
           scorableItems[classType][vendorHash][itemSubType].theoreticalMax = scores.theoreticalMax;
+          scorableItems[classType][vendorHash][itemSubType].theoreticalMin = scores.theoreticalMin;
+          scorableItems[classType][vendorHash][itemSubType].scoredStats = scores.scoredStats;
         }
       }
   }

@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useQuery } from '../../hooks';
 
 const Callback = () => {

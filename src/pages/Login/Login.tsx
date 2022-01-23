@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import OAuth2Login from 'react-simple-oauth2-login';
 import { CLIENT_ID, getAccessTokenFromCode, REDIRECT_URI } from '../../helpers';

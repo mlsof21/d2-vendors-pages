@@ -1,14 +1,13 @@
+import { useState } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import './app.scss';
-import Spinner from './components/Spinner/Spinner';
-import { FC, useState } from 'react';
 import Nav from './components/Nav/Nav';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import Login from './pages/Login/Login';
+import Spinner from './components/Spinner/Spinner';
 import Callback from './pages/Callback/Callback';
-import Vendors from './pages/Vendors/Vendors';
+import Login from './pages/Login/Login';
 import Settings from './pages/Settings/Settings';
+import Vendors from './pages/Vendors/Vendors';
 import TokenStorage from './storage/Tokens';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 const App = () => {
   const [loading, _] = useState(false);
@@ -22,17 +21,15 @@ const App = () => {
   return (
     <div className="App">
       <Nav isAuthorized={isAuthed} />
-      <ErrorBoundary>
-        <Switch>
-          <Route exact={true} path="/login" component={Login} />
-          <Route exact={true} path="/vendors" component={Vendors} />
-          <Route exact={true} path="/" component={Vendors} />
-          <Route exact={true} path="/callback" component={Callback} />
-          <Route exact={true} path="/settings" component={Settings} />
-          <Redirect to="/" />
-        </Switch>
-        {loading && <Spinner text="Loading Destiny manifest" noOverlay={false} />}
-      </ErrorBoundary>
+      <Switch>
+        <Route exact={true} path="/login" component={Login} />
+        <Route exact={true} path="/vendors" component={Vendors} />
+        <Route exact={true} path="/" component={Vendors} />
+        <Route exact={true} path="/callback" component={Callback} />
+        <Route exact={true} path="/settings" component={Settings} />
+        <Redirect to="/" />
+      </Switch>
+      {loading && <Spinner text="Loading Destiny manifest" noOverlay={false} />}
     </div>
   );
 };

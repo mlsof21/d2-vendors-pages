@@ -1,9 +1,9 @@
 .modal {
   position: fixed;
-  width: 25%;
+  width: 200px;
   background: #15151b;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
   justify-content: center;
 }
 
@@ -15,7 +15,7 @@ h3 {
 .imgAndFlavor {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: center;
   margin-bottom: 5px;
 }
 
@@ -23,10 +23,7 @@ img {
   border: 1px white;
   margin: 2px;
 }
-// .modal-content {
-//   background: rgb(0, 0, 0);
-//   width: 80%;
-//   // top: 50%;
-//   // left: 50%;
-//   transform: translate(-50%, -50%);
-// }
+
+.highlightedStat {
+  color: #ffd700;
+}

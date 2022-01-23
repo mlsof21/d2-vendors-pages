@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Armor } from '../../scoring/items';
 import './itemPopup.scss';
 import ItemPopupStats from './ItemPopupStats';
@@ -44,9 +44,8 @@ const ItemPopup = ({ armorInfo, show, onClickOutside, top, left }: ItemPopupProp
         <h3>{armorInfo?.name}</h3>
         <div className="imgAndFlavor">
           <img src={armorInfo?.iconPath} />
-          <span>{armorInfo?.flavorText}</span>
         </div>
-        <ItemPopupStats armorStats={armorInfo?.stats} />
+        <ItemPopupStats armorStats={armorInfo?.stats} highlightedStats={armorInfo?.scoredStats} />
       </div>
     );
   }

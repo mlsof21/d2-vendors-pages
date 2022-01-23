@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   getDestinyInventoryItemManifest,
@@ -7,13 +7,9 @@ import {
 } from '../../bungie-api/destiny2-api';
 import ItemPopup from '../../components/ItemPopup/ItemPopup';
 import Spinner from '../../components/Spinner/Spinner';
-import { armorTypes, classTypeMap, vendorHashes, orderedClassKeys as classKeys } from '../../hashes';
+import { armorTypes, classTypeMap, orderedClassKeys as classKeys, vendorHashes } from '../../hashes';
 import { Armor, getArmorScores, getScorableItems as getScorableArmor, ScorableItems } from '../../scoring/items';
-import {
-  getDestinyInventoryItemDefinitionFromStore,
-  getDestinyStatDefinitionFromStore,
-  storeManifest,
-} from '../../storage/IndexedDB';
+import { getDestinyInventoryItemDefinitionFromStore, storeManifest } from '../../storage/IndexedDB';
 import MembershipInfoStorage from '../../storage/Membership';
 import TokenStorage from '../../storage/Tokens';
 import './vendors.scss';
@@ -31,6 +27,8 @@ const Vendors = () => {
   const [armorScores, setArmorScores] = useState<ScorableItems>();
   const [showNormalized, setShowNormalized] = useState(true);
   const [classMaxes, setClassMaxes] = useState<{ [key: number]: number }>({ 0: 0, 1: 0, 2: 0 });
+  const [classMins, setClassMins] = useState<{ [key: number]: number }>({ 0: 0, 1: 0, 2: 0 });
+
   const [orderedClassKeys, setOrderedClassKeys] = useState([...classKeys]);
   const [orderedVendorKeys, setOrderedVendorKeys] = useState([
     350061650, 396892126, 248695599, 1576276905, 3603221665, 2190858386, 69482069,
@@ -56,7 +54,6 @@ const Vendors = () => {
 
   useEffect(() => {
     getAllData();
-    // setLoading(false);
   }, []);
 
   async function getAllData() {
@@ -103,15 +100,20 @@ const Vendors = () => {
     const vendorHash = parseInt(Object.keys(scores[0])[0]);
     const armorHash = 26;
     const maxes: { [key: number]: number } = {};
+    const mins: { [key: number]: number } = {};
     for (let i = 0; i < 3; i++) {
       if (i in scores) {
         if (scores[i][vendorHash][armorHash].theoreticalMax) {
           maxes[i] = scores[i][vendorHash][armorHash].theoreticalMax!;
         }
+        if (scores[i][vendorHash][armorHash].theoreticalMin) {
+          mins[i] = scores[i][vendorHash][armorHash].theoreticalMin!;
+        }
       }
     }
 
     setClassMaxes(maxes);
+    setClassMins(mins);
   };
 
   const handleMissingKeys = (scores: ScorableItems) => {
@@ -139,7 +141,7 @@ const Vendors = () => {
               <tbody>
                 <tr>
                   <th>
-                    {classTypeMap[classKey]} {!showNormalized && `(${classMaxes[classKey]})`}
+                    {classTypeMap[classKey]} {!showNormalized && `(${classMins[classKey]}-${classMaxes[classKey]})`}
                   </th>
                   {orderedVendorKeys.map((vendorKey) => (
                     <th key={vendorKey}>{vendorHashes[vendorKey]}</th>

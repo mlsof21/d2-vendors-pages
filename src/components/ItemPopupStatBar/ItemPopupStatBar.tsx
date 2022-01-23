@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import './itemPopupStatBar.scss';
 
 type ItemPopupStatBarProps = {

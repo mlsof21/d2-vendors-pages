@@ -1,7 +1,6 @@
 import {
   BungieMembershipType,
   DestinyClass,
-  DestinyComponentType,
   DestinyManifest,
   DestinyManifestSlice,
   DestinyProfileResponse,
