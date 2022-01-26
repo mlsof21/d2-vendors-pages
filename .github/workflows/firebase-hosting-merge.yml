@@ -7,6 +7,11 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
       - firebase-hosting
+env:
+  REACT_APP_BUNGIE_REDIRECT_URI: ${{ secrets.REACT_APP_BUNGIE_REDIRECT_URI}}
+  REACT_APP_BUNGIE_CLIENT_ID: ${{ secrets.REACT_APP_BUNGIE_CLIENT_ID}}
+  REACT_APP_BUNGIE_CLIENT_SECRET: ${{ secrets.REACT_APP_BUNGIE_CLIENT_SECRET}}
+  REACT_APP_BUNGIE_API_KEY: ${{ secrets.REACT_APP_BUNGIE_API_KEY}}
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
