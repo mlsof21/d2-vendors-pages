@@ -10,6 +10,7 @@ const Nav = ({ isAuthorized }: NavProps) => {
     <div className="navbar">
       {!isAuthorized && <Link to="/login">Login</Link>}
       {isAuthorized && <Link to="/vendors">Vendors</Link>}
+      {isAuthorized && <Link to="/inventory">Inventory</Link>}
       {<Link to="/settings">Settings</Link>}
     </div>
   );

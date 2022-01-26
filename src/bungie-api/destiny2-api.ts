@@ -1,10 +1,12 @@
 import {
   BungieMembershipType,
+  DestinyCharacterResponse,
   DestinyClass,
   DestinyManifest,
   DestinyManifestSlice,
   DestinyProfileResponse,
   DestinyVendorsResponse,
+  getCharacter,
   getDestinyManifest,
   getDestinyManifestSlice,
   getLinkedProfiles,
@@ -135,6 +137,40 @@ export async function getVendors(
   const response = await getVendorsTs($httpAuthenticated, {
     characterId,
     components: [304, 402],
+    destinyMembershipId,
+    membershipType,
+  });
+
+  return response.Response;
+}
+
+export async function getInventoryForAllCharacters(membershipInfo: MembershipInfo) {
+  const characterIds = mapCharacterIds(membershipInfo);
+
+  const fullResponse: { [key: number]: DestinyCharacterResponse } = {};
+  await Promise.all(
+    characterIds.map(async ({ id, classType }) => {
+      const characterResponse = await getCharacterInventory(
+        id,
+        membershipInfo.destinyMembershipId,
+        membershipInfo.membershipType,
+      );
+
+      fullResponse[classType] = characterResponse;
+    }),
+  );
+
+  return fullResponse;
+}
+
+export async function getCharacterInventory(
+  characterId: string,
+  destinyMembershipId: string,
+  membershipType: BungieMembershipType,
+) {
+  const response = await getCharacter($httpAuthenticated, {
+    characterId,
+    components: [205, 304],
     destinyMembershipId,
     membershipType,
   });

@@ -3,11 +3,16 @@ import OAuth2Login from 'react-simple-oauth2-login';
 import { CLIENT_ID, getAccessTokenFromCode, REDIRECT_URI } from '../../helpers';
 import './login.scss';
 
-const Login = () => {
+interface LoginProps {
+  handleAuth: () => void;
+}
+
+const Login = ({ handleAuth }: LoginProps) => {
   const history = useHistory();
 
   const onSuccess = async (response: any) => {
     const code = response.code;
+    handleAuth();
     await getAccessTokenFromCode(code);
     history.push('/vendors');
   };
