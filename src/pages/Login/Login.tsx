@@ -1,23 +1,19 @@
-import { useHistory } from 'react-router-dom';
 import OAuth2Login from 'react-simple-oauth2-login';
-import { CLIENT_ID, getAccessTokenFromCode, REDIRECT_URI } from '../../helpers';
+import { CLIENT_ID, REDIRECT_URI } from '../../helpers';
+import { useAuth } from '../../hooks/useAuth';
 import './login.scss';
 
 interface LoginProps {
   handleAuth: () => void;
 }
 
-const Login = ({ handleAuth }: LoginProps) => {
-  const history = useHistory();
+const Login = () => {
+  const { login } = useAuth();
 
-  const onSuccess = async (response: any) => {
-    const code = response.code;
-    handleAuth();
-    await getAccessTokenFromCode(code);
-    history.push('/vendors');
+  const onFailure = (response: Response) => {
+    console.error(response);
+    throw Error("Couldn't login");
   };
-
-  const onFailure = (response: Response) => console.log(response);
 
   return (
     <OAuth2Login
@@ -25,7 +21,7 @@ const Login = ({ handleAuth }: LoginProps) => {
       responseType="code"
       clientId={CLIENT_ID}
       redirectUri={REDIRECT_URI}
-      onSuccess={onSuccess}
+      onSuccess={login}
       onFailure={onFailure}
       buttonText="Login with Bungie.net"
       className="loginButton"

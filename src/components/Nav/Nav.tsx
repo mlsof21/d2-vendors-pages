@@ -1,17 +1,16 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import './nav.scss';
 
-type NavProps = {
-  isAuthorized: boolean;
-};
-
-const Nav = ({ isAuthorized }: NavProps) => {
+const Nav = () => {
+  const { auth } = useAuth();
   return (
     <div className="navbar">
-      {!isAuthorized && <Link to="/login">Login</Link>}
-      {isAuthorized && <Link to="/vendors">Vendors</Link>}
-      {isAuthorized && <Link to="/inventory">Inventory</Link>}
+      {!auth && <Link to="/login">Login</Link>}
+      {auth && <Link to="/vendors">Vendors</Link>}
+      {auth && <Link to="/inventory">Inventory</Link>}
       {<Link to="/settings">Settings</Link>}
+      {auth && <Link to="/logout">Logout</Link>}
     </div>
   );
 };
