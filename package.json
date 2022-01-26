@@ -1,6 +1,6 @@
 {
   "name": "destiny-2-vendor-scoring",
-  "homepage": "https://mlsof21.github.io/d2-vendors-pages/",
+  "homepage": ".",
   "version": "0.1.0",
   "main": "public/index.html",
   "private": true,
@@ -28,7 +28,8 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "prettify": "prettier src/**/*.ts --write",
     "predeploy": "env-cmd -f .env.production npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "firebase:deploy": "env-cmd -f .env.firebase npm run build && firebase deploy"
   },
   "eslintConfig": {
     "extends": [
