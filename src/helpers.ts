@@ -1,5 +1,5 @@
 import { HttpClientConfig } from 'bungie-api-ts/http';
-import TokenStorage, { Token, Tokens } from './storage/Tokens';
+import TokenStorage, { Token, Tokens } from './storage/TokenStorage';
 
 export const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY || '';
 export const CLIENT_ID = process.env.REACT_APP_BUNGIE_CLIENT_ID || '';
@@ -25,7 +25,7 @@ export async function getActiveToken(): Promise<Tokens> {
   }
 
   try {
-    if (allTokens) return await getAccessTokenFromRefreshToken(allTokens.refreshToken!);
+    if (allTokens?.refreshToken) return await getAccessTokenFromRefreshToken(allTokens.refreshToken);
     throw new Error();
   } catch (e) {
     throw new Error('I dunno');
