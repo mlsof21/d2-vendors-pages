@@ -154,6 +154,10 @@ const Vendors = () => {
                     <tr key={armorType}>
                       <th scope="row">{armorTypes[armorType]}</th>
                       {orderedVendorKeys.map((vendorHash) => {
+                        if (!(armorType in armorScores[classKey][vendorHash])) {
+                          return <td></td>;
+                        }
+
                         return (
                           <td
                             className="scoreCell"
