@@ -1,20 +1,22 @@
 import {
   BungieMembershipType,
-  DestinyCharacterResponse,
   DestinyClass,
   DestinyManifest,
   DestinyManifestSlice,
   DestinyProfileResponse,
+  DestinyVendorComponent,
   DestinyVendorsResponse,
-  getCharacter,
+  DictionaryComponentResponse,
   getDestinyManifest,
   getDestinyManifestSlice,
   getLinkedProfiles,
   getProfile,
   getVendors as getVendorsTs,
 } from 'bungie-api-ts/destiny2';
+import { readVendorData, writeVendorData } from '../firebase/firebaseFunctions';
 import { $http, $httpAuthenticated } from '../helpers';
-import { MembershipInfo } from '../storage/Membership';
+import { MembershipInfo } from '../storage/MembershipStorage';
+import VendorStorage from '../storage/VendorStorage';
 
 export async function getMembershipInfo(membershipId: string): Promise<MembershipInfo> {
   const linkedProfiles = await getLinkedProfiles($httpAuthenticated, {
@@ -118,17 +120,59 @@ function mapCharacterIds(membershipInfo: MembershipInfo): CharacterToId[] {
 export async function getVendorsForAllCharacters(membershipInfo: MembershipInfo) {
   const characterIds = mapCharacterIds(membershipInfo);
 
-  const fullResponse: { [key: number]: DestinyVendorsResponse } = {};
-  await Promise.all(
-    characterIds.map(async ({ id, classType }) => {
-      const response = await getVendors(id, membershipInfo.destinyMembershipId, membershipInfo.membershipType);
-      fullResponse[classType] = response;
-    }),
-  );
+  const vendorStorage = VendorStorage.getInstance();
+  const storageRefreshDate = vendorStorage.getRefreshDate();
+  let vendorRefreshDate = '';
 
+  let firebaseVendors: string | null = null;
+  console.time('FirebaseVendors');
+  console.timeLog('FirebaseVendors');
+  if (storageRefreshDate && !isExpired(storageRefreshDate)) firebaseVendors = await readVendorData(storageRefreshDate);
+  console.log({ firebaseVendors });
+  let fullResponse: { [key: number]: DestinyVendorsResponse } = {};
+  if (!firebaseVendors) {
+    console.time('GetVendors API');
+    console.timeLog('GetVendors API');
+    await Promise.all(
+      characterIds.map(async ({ id, classType }) => {
+        const response = await getVendors(id, membershipInfo.destinyMembershipId, membershipInfo.membershipType);
+        fullResponse[classType] = response;
+
+        if (vendorRefreshDate === '') {
+          vendorRefreshDate = getRefreshDate(response.vendors);
+        }
+      }),
+    );
+    console.timeEnd('GetVendors API');
+  } else {
+    fullResponse = JSON.parse(firebaseVendors);
+  }
+  console.timeEnd('FirebaseVendors');
+
+  if (storageRefreshDate === null && vendorRefreshDate !== '') {
+    vendorStorage.setRefreshDate(vendorRefreshDate);
+  }
+
+  if (!firebaseVendors) {
+    writeVendorData(JSON.stringify(fullResponse), vendorRefreshDate);
+  }
   return fullResponse;
 }
 
+function getRefreshDate(vendors: DictionaryComponentResponse<DestinyVendorComponent>): string {
+  let expireDate = '';
+  if (vendors.data) {
+    const vendorKeys = Object.keys(vendors.data);
+    expireDate = vendors.data[vendorKeys[0]].nextRefreshDate;
+  }
+  return expireDate;
+}
+
+function isExpired(date: string): boolean {
+  const now = new Date();
+  const nextRefreshDate = new Date(date);
+  return now > nextRefreshDate;
+}
 export async function getVendors(
   characterId: string,
   destinyMembershipId: string,
@@ -136,7 +180,7 @@ export async function getVendors(
 ): Promise<DestinyVendorsResponse> {
   const response = await getVendorsTs($httpAuthenticated, {
     characterId,
-    components: [304, 402],
+    components: [304, 402, 400],
     destinyMembershipId,
     membershipType,
   });
@@ -144,36 +188,14 @@ export async function getVendors(
   return response.Response;
 }
 
-export async function getInventoryForAllCharacters(membershipInfo: MembershipInfo) {
-  const characterIds = mapCharacterIds(membershipInfo);
-
-  const fullResponse: { [key: number]: DestinyCharacterResponse } = {};
-  await Promise.all(
-    characterIds.map(async ({ id, classType }) => {
-      const characterResponse = await getCharacterInventory(
-        id,
-        membershipInfo.destinyMembershipId,
-        membershipInfo.membershipType,
-      );
-
-      fullResponse[classType] = characterResponse;
-    }),
-  );
-
-  return fullResponse;
-}
-
-export async function getCharacterInventory(
-  characterId: string,
+export async function getVaultInventory(
   destinyMembershipId: string,
   membershipType: BungieMembershipType,
-) {
-  const response = await getCharacter($httpAuthenticated, {
-    characterId,
-    components: [205, 304],
+): Promise<DestinyProfileResponse> {
+  const response = await getProfile($httpAuthenticated, {
     destinyMembershipId,
     membershipType,
+    components: [201, 205, 305, 102, 300],
   });
-
   return response.Response;
 }

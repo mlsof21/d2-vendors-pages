@@ -8,10 +8,10 @@ import {
 import ItemPopup from '../../components/ItemPopup/ItemPopup';
 import Spinner from '../../components/Spinner/Spinner';
 import { armorTypes, classTypeMap, orderedClassKeys as classKeys, vendorHashes } from '../../hashes';
-import { Armor, getArmorScores, getScorableItems as getScorableArmor, ScorableItems } from '../../scoring/items';
+import { Armor, getArmorScores, getScorableItems as getScorableArmor, ScorableVendorItems } from '../../scoring/items';
 import { getDestinyInventoryItemDefinitionFromStore, storeManifest } from '../../storage/IndexedDB';
-import MembershipInfoStorage from '../../storage/Membership';
-import TokenStorage from '../../storage/Tokens';
+import MembershipInfoStorage from '../../storage/MembershipStorage';
+import TokenStorage from '../../storage/TokenStorage';
 import './vendors.scss';
 
 export interface Position {
@@ -24,7 +24,7 @@ const Vendors = () => {
 
   const [loading, setLoading] = useState(true);
   const [spinnerText, setSpinnerText] = useState('Loading Destiny manifest');
-  const [armorScores, setArmorScores] = useState<ScorableItems>();
+  const [armorScores, setArmorScores] = useState<ScorableVendorItems>();
   const [showNormalized, setShowNormalized] = useState(true);
   const [classMaxes, setClassMaxes] = useState<{ [key: number]: number }>({ 0: 0, 1: 0, 2: 0 });
   const [classMins, setClassMins] = useState<{ [key: number]: number }>({ 0: 0, 1: 0, 2: 0 });
@@ -96,7 +96,7 @@ const Vendors = () => {
     console.log(`Clicked item hash ${armorInfo.itemHash}`);
   };
 
-  const getCharacterMaxes = (scores: ScorableItems) => {
+  const getCharacterMaxes = (scores: ScorableVendorItems) => {
     const vendorHash = parseInt(Object.keys(scores[0])[0]);
     const armorHash = 26;
     const maxes: { [key: number]: number } = {};
@@ -116,7 +116,7 @@ const Vendors = () => {
     setClassMins(mins);
   };
 
-  const handleMissingKeys = (scores: ScorableItems) => {
+  const handleMissingKeys = (scores: ScorableVendorItems) => {
     const classes = Object.keys(scores).map((x) => parseInt(x));
     const filteredClasses = orderedClassKeys.filter((x) => classes.includes(x));
     setOrderedClassKeys([...filteredClasses]);
@@ -154,6 +154,10 @@ const Vendors = () => {
                     <tr key={armorType}>
                       <th scope="row">{armorTypes[armorType]}</th>
                       {orderedVendorKeys.map((vendorHash) => {
+                        if (!(armorType in armorScores[classKey][vendorHash])) {
+                          return <td></td>;
+                        }
+
                         return (
                           <td
                             className="scoreCell"

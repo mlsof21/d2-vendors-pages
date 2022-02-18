@@ -1,5 +1,5 @@
 import tinygradient from 'tinygradient';
-import ScoringStorage from '../storage/Scoring';
+import ScoringStorage from '../storage/ScoringStorage';
 import { ArmorStats } from './items';
 
 export class ArmorScoring {

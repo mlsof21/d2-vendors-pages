@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { classTypeMap, orderedClassKeys } from '../../hashes';
-import { ArmorScoring, getDefaultScoring } from '../../scoring/scoring';
-import ScoringStorage from '../../storage/Scoring';
+import {
+  ArmorScoring,
+  getDefaultHunterScoring,
+  getDefaultScoring,
+  getDefaultTitanScoring,
+  getDefaultWarlockScoring,
+} from '../../scoring/scoring';
+import ScoringStorage from '../../storage/ScoringStorage';
 import './settings.scss';
 
 const Settings = () => {
@@ -14,9 +20,9 @@ const Settings = () => {
         2: new ArmorScoring(storedScoring[2]),
       }
     : {
-        0: getDefaultScoring(),
-        1: getDefaultScoring(),
-        2: getDefaultScoring(),
+        0: getDefaultTitanScoring(),
+        1: getDefaultHunterScoring(),
+        2: getDefaultWarlockScoring(),
       };
 
   const [settings, setSettings] = useState<{ [key: number]: ArmorScoring }>(initialScoring);

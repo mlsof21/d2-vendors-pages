@@ -4,8 +4,10 @@ import { BUNGIE_ROOT } from '../helpers';
 import { getDestinyInventoryItemDefinitionFromStore } from '../storage/IndexedDB';
 import { Colors, getColors, getScores } from './scoring';
 
-export async function getScorableItems(allVendors: { [key: number]: DestinyVendorsResponse }): Promise<ScorableItems> {
-  const classToArmor: ScorableItems = {};
+export async function getScorableItems(allVendors: {
+  [key: number]: DestinyVendorsResponse;
+}): Promise<ScorableVendorItems> {
+  const classToArmor: ScorableVendorItems = {};
 
   const classTypes = Object.keys(allVendors).map((x) => parseInt(x));
 
@@ -26,7 +28,7 @@ export async function getScorableItems(allVendors: { [key: number]: DestinyVendo
   return classToArmor;
 }
 
-export interface ScorableItems {
+export interface ScorableVendorItems {
   [classType: number]: VendorArmor;
 }
 
@@ -99,15 +101,15 @@ async function getArmor(
   return armor;
 }
 
-function isScorable(itemSubType: number): boolean {
+export function isScorable(itemSubType: number): boolean {
   const armorTypeHashes = Object.keys(armorTypes).map((x) => parseInt(x));
   return armorTypeHashes.includes(itemSubType);
 }
 
 export async function getArmorScores(
-  scorableItems: ScorableItems,
+  scorableItems: ScorableVendorItems,
   allVendors: { [key: number]: DestinyVendorsResponse },
-) {
+): Promise<ScorableVendorItems> {
   for (const classType in scorableItems) {
     for (const vendorHash in scorableItems[classType])
       for (const itemSubType in scorableItems[classType][vendorHash]) {
