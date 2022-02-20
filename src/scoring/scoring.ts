@@ -1,27 +1,27 @@
 import tinygradient from 'tinygradient';
+import { statHashes, subgroup1Hashes, subgroup2Hashes } from '../hashes';
 import ScoringStorage from '../storage/ScoringStorage';
-import { ArmorStats } from './items';
 
-export class ArmorScoring {
-  public Mobility: number = 0;
-  public Resilience: number = 0;
-  public Recovery: number = 0;
-  public Discipline: number = 0;
-  public Intellect: number = 0;
-  public Strength: number = 0;
+// export class ArmorScoring {
+//   public Mobility: number = 0;
+//   public Resilience: number = 0;
+//   public Recovery: number = 0;
+//   public Discipline: number = 0;
+//   public Intellect: number = 0;
+//   public Strength: number = 0;
 
-  constructor(init?: Partial<ArmorScoring>) {
-    Object.assign(this, init);
-  }
+//   constructor(init?: Partial<ArmorScoring>) {
+//     Object.assign(this, init);
+//   }
 
-  getSortedSubGroup1(): number[] {
-    return [this.Mobility, this.Resilience, this.Recovery].sort((a, b) => b - a);
-  }
+//   getSortedSubGroup1(): number[] {
+//     return [this.Mobility, this.Resilience, this.Recovery].sort((a, b) => b - a);
+//   }
 
-  getSortedSubGroup2(): number[] {
-    return [this.Discipline, this.Intellect, this.Strength].sort((a, b) => b - a);
-  }
-}
+//   getSortedSubGroup2(): number[] {
+//     return [this.Discipline, this.Intellect, this.Strength].sort((a, b) => b - a);
+//   }
+// }
 
 export interface Score {
   rawScore: number;
@@ -36,7 +36,7 @@ export interface Colors {
   normalizedColorHex: string;
 }
 
-export function getScores(armorStats: ArmorStats, classType: number): Score {
+export function getScores(armorStats: Record<number, number>, classType: number): Score {
   const scoring = getScoring(classType);
   const scoredStats = getScoredStats(scoring);
   const rawScore = getRawScore(armorStats, scoring);
@@ -47,27 +47,21 @@ export function getScores(armorStats: ArmorStats, classType: number): Score {
   return { rawScore, normalizedScore, theoreticalMax, theoreticalMin, scoredStats };
 }
 
-export function getScoredStats(scoring: ArmorScoring): string[] {
+export function getScoredStats(scoring: Record<number, number>): string[] {
   const scoredStats = [];
 
-  if (scoring.Mobility > 0) scoredStats.push('Mobility');
-  if (scoring.Resilience > 0) scoredStats.push('Resilience');
-  if (scoring.Recovery > 0) scoredStats.push('Recovery');
-  if (scoring.Discipline > 0) scoredStats.push('Discipline');
-  if (scoring.Intellect > 0) scoredStats.push('Intellect');
-  if (scoring.Strength > 0) scoredStats.push('Strength');
+  for (const stat in scoring) {
+    scoredStats.push(statHashes[stat]);
+  }
 
   return scoredStats;
 }
 
-export function getRawScore(armorStats: ArmorStats, scoring: ArmorScoring): number {
+export function getRawScore(armorStats: Record<number, number>, scoring: Record<number, number>): number {
   let score = 0;
-  score += armorStats.Mobility * scoring.Mobility;
-  score += armorStats.Resilience * scoring.Resilience;
-  score += armorStats.Recovery * scoring.Recovery;
-  score += armorStats.Discipline * scoring.Discipline;
-  score += armorStats.Intellect * scoring.Intellect;
-  score += armorStats.Strength * scoring.Strength;
+  for (const stat in scoring) {
+    score += armorStats[stat] * scoring[stat];
+  }
   return score;
 }
 
@@ -85,7 +79,7 @@ export function getColors(score: Score): Colors {
   return { colorHex, normalizedColorHex };
 }
 
-function getScoring(classType: number): ArmorScoring {
+function getScoring(classType: number): Record<number, number> {
   const scoringStorage = ScoringStorage.getInstance();
 
   switch (classType) {
@@ -96,54 +90,54 @@ function getScoring(classType: number): ArmorScoring {
     case 2:
       return getWarlockScoring(scoringStorage);
   }
-  return new ArmorScoring();
+  return {};
 }
 
-function getTitanScoring(scoringStorage: ScoringStorage): ArmorScoring {
+function getTitanScoring(scoringStorage: ScoringStorage): Record<number, number> {
   const storedScoring = scoringStorage.getScoring();
   if (storedScoring) {
-    return new ArmorScoring(storedScoring[0]);
+    return storedScoring[0];
   }
   return getDefaultTitanScoring();
 }
 
-function getHunterScoring(scoringStorage: ScoringStorage): ArmorScoring {
+function getHunterScoring(scoringStorage: ScoringStorage): Record<number, number> {
   const storedScoring = scoringStorage.getScoring();
   if (storedScoring) {
-    return new ArmorScoring(storedScoring[1]);
+    return storedScoring[1];
   }
   return getDefaultHunterScoring();
 }
 
-function getWarlockScoring(scoringStorage: ScoringStorage): ArmorScoring {
+function getWarlockScoring(scoringStorage: ScoringStorage): Record<number, number> {
   const storedScoring = scoringStorage.getScoring();
   if (storedScoring) {
-    return new ArmorScoring(storedScoring[2]);
+    return storedScoring[2];
   }
   return getDefaultWarlockScoring();
 }
 
-export function getDefaultTitanScoring(): ArmorScoring {
-  return new ArmorScoring({ Recovery: 3, Discipline: 2, Resilience: 1 });
+export function getDefaultTitanScoring(): Record<number, number> {
+  return { 1943323491: 3, 1735777505: 2, 392767087: 1 };
 }
 
-export function getDefaultHunterScoring(): ArmorScoring {
-  return new ArmorScoring({ Recovery: 3, Discipline: 2, Mobility: 1 });
+export function getDefaultHunterScoring(): Record<number, number> {
+  return { 1943323491: 3, 1735777505: 2, 2996146975: 1 };
 }
 
-export function getDefaultWarlockScoring(): ArmorScoring {
-  return new ArmorScoring({ Recovery: 3, Discipline: 3 });
+export function getDefaultWarlockScoring(): Record<number, number> {
+  return { 1943323491: 3, 1735777505: 3 };
 }
 
-export function getDefaultScoring(): ArmorScoring {
-  return new ArmorScoring({ Mobility: 1, Resilience: 1, Recovery: 1, Discipline: 1, Intellect: 1, Strength: 1 });
+export function getDefaultScoring(): Record<number, number> {
+  return { 2996146975: 1, 392767087: 1, 1943323491: 1, 1735777505: 1, 144602215: 1, 4244567218: 1 };
 }
 
-export function getTheoreticalMin(armorScoring: ArmorScoring): number {
+export function getTheoreticalMin(armorScoring: Record<number, number>): number {
   // per subgroup: highest weighting * lowest stat + medium weighting * medium stat + smallest weighting * highest stat
 
-  const sortedSubGroup1 = armorScoring.getSortedSubGroup1();
-  const sortedSubGroup2 = armorScoring.getSortedSubGroup2();
+  const sortedSubGroup1 = getSortedSubGroup(armorScoring, subgroup1Hashes);
+  const sortedSubGroup2 = getSortedSubGroup(armorScoring, subgroup2Hashes);
 
   const plugs = [
     [2, 10, 10],
@@ -165,15 +159,27 @@ export function getTheoreticalMin(armorScoring: ArmorScoring): number {
   return min;
 }
 
-export function getTheoreticalMax(armorScoring: ArmorScoring): number {
+export function getTheoreticalMax(armorScoring: Record<number, number>): number {
   const maxStatPossible = 30;
   const minStatPossible = 2;
 
-  const sortedSubGroup1 = armorScoring.getSortedSubGroup1();
-  const sortedSubGroup2 = armorScoring.getSortedSubGroup2();
+  const sortedSubGroup1 = getSortedSubGroup(armorScoring, subgroup1Hashes);
+  const sortedSubGroup2 = getSortedSubGroup(armorScoring, subgroup2Hashes);
 
   return (
     maxStatPossible * (sortedSubGroup1[0] + sortedSubGroup2[0]) +
     minStatPossible * (sortedSubGroup1[1] + sortedSubGroup1[2] + sortedSubGroup2[1] + sortedSubGroup2[2])
   );
+}
+
+export function getSortedSubGroup(armorScoring: Record<number, number>, subgroup: number[]): number[] {
+  const sorted = [];
+  for (const stat in armorScoring) {
+    if (subgroup.includes(parseInt(stat))) sorted.push(armorScoring[stat]);
+  }
+
+  if (sorted.length < 3) {
+    sorted.fill(0, sorted.length, 2);
+  }
+  return sorted.sort((a, b) => b - a);
 }

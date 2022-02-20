@@ -1,71 +1,49 @@
-import { ArmorStats } from './items';
-import { ArmorScoring, getNormalizedScore, getRawScore, getTheoreticalMax, getTheoreticalMin } from './scoring';
+import { getNormalizedScore, getRawScore, getTheoreticalMax, getTheoreticalMin } from './scoring';
 
 const testCases = [
   {
-    armorScore: new ArmorScoring({ Mobility: 1, Resilience: 1, Recovery: 1, Discipline: 1, Intellect: 1, Strength: 1 }),
-    armorStats: new ArmorStats({ Mobility: 6, Resilience: 6, Recovery: 10, Discipline: 11, Intellect: 6, Strength: 6 }),
+    armorScore: { 2996146975: 1, 392767087: 1, 1943323491: 1, 1735777505: 1, 144602215: 1, 4244567218: 1 },
+    armorStats: { 2996146975: 6, 392767087: 6, 1943323491: 10, 1735777505: 11, 144602215: 6, 4244567218: 6 },
     expectedRawScore: 45,
     expectedNormalizedScore: 4,
     expectedMin: 44,
     expectedMax: 68,
   },
   {
-    armorScore: new ArmorScoring({ Mobility: 3, Resilience: 2, Recovery: 1, Discipline: 3, Intellect: 2, Strength: 1 }),
-    armorStats: new ArmorStats({
-      Mobility: 10,
-      Resilience: 2,
-      Recovery: 20,
-      Discipline: 10,
-      Intellect: 16,
-      Strength: 7,
-    }),
+    armorScore: { 2996146975: 3, 392767087: 2, 1943323491: 1, 1735777505: 3, 144602215: 2, 4244567218: 1 },
+    armorStats: { 2996146975: 10, 392767087: 2, 1943323491: 20, 1735777505: 10, 144602215: 16, 4244567218: 7 },
     expectedRawScore: 123,
     expectedNormalizedScore: 48,
     expectedMin: 60,
     expectedMax: 192,
   },
   {
-    armorScore: new ArmorScoring({ Mobility: 3, Resilience: 3, Recovery: 3, Discipline: 3, Intellect: 3, Strength: 3 }),
-    armorStats: new ArmorStats({ Mobility: 2, Resilience: 27, Recovery: 2, Discipline: 24, Intellect: 2, Strength: 6 }),
+    armorScore: { 2996146975: 3, 392767087: 3, 1943323491: 3, 1735777505: 3, 144602215: 3, 4244567218: 3 },
+    armorStats: { 2996146975: 2, 392767087: 27, 1943323491: 2, 1735777505: 24, 144602215: 2, 4244567218: 6 },
     expectedRawScore: 189,
     expectedNormalizedScore: 79,
     expectedMin: 132,
     expectedMax: 204,
   },
   {
-    armorScore: new ArmorScoring({ Mobility: 1, Resilience: 1, Recovery: 1, Discipline: 1, Intellect: 1, Strength: 1 }),
-    armorStats: new ArmorStats({
-      Mobility: 2,
-      Resilience: 2,
-      Recovery: 23,
-      Discipline: 20,
-      Intellect: 12,
-      Strength: 2,
-    }),
+    armorScore: { 2996146975: 1, 392767087: 1, 1943323491: 1, 1735777505: 1, 144602215: 1, 4244567218: 1 },
+    armorStats: { 2996146975: 2, 392767087: 2, 1943323491: 23, 1735777505: 20, 144602215: 12, 4244567218: 2 },
     expectedRawScore: 61,
     expectedNormalizedScore: 71,
     expectedMin: 44,
     expectedMax: 68,
   },
   {
-    armorScore: new ArmorScoring({ Recovery: 4 }),
-    armorStats: new ArmorStats({ Mobility: 2, Resilience: 2, Recovery: 28, Discipline: 2, Intellect: 22, Strength: 6 }),
+    armorScore: { 2996146975: 0, 392767087: 0, 1943323491: 4, 1735777505: 0, 144602215: 0, 4244567218: 0 },
+    armorStats: { 2996146975: 2, 392767087: 2, 1943323491: 28, 1735777505: 2, 144602215: 22, 4244567218: 6 },
     expectedRawScore: 112,
     expectedNormalizedScore: 93,
     expectedMin: 8,
     expectedMax: 120,
   },
   {
-    armorScore: new ArmorScoring({ Resilience: 2, Strength: 1 }),
-    armorStats: new ArmorStats({
-      Mobility: 2,
-      Resilience: 30,
-      Recovery: 2,
-      Discipline: 10,
-      Intellect: 2,
-      Strength: 21,
-    }),
+    armorScore: { 2996146975: 0, 392767087: 2, 1943323491: 0, 1735777505: 0, 144602215: 0, 4244567218: 1 },
+    armorStats: { 2996146975: 2, 392767087: 30, 1943323491: 2, 1735777505: 10, 144602215: 2, 4244567218: 21 },
     expectedRawScore: 81,
     expectedNormalizedScore: 89,
     expectedMin: 6,
@@ -75,7 +53,7 @@ const testCases = [
 
 const minTestCases = [
   {
-    armorScore: new ArmorScoring({ Mobility: 0, Resilience: 4, Recovery: 6, Discipline: 0, Intellect: 0, Strength: 0 }),
+    armorScore: { 2996146975: 0, 392767087: 4, 1943323491: 6, 1735777505: 0, 144602215: 0, 4244567218: 0 },
     expectedMin: 20,
   },
 ];

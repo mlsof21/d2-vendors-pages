@@ -35,6 +35,9 @@ export const statHashes: Record<number, string> = {
   4244567218: 'Strength',
 };
 
+export const subgroup1Hashes = [2996146975, 392767087, 1943323491];
+export const subgroup2Hashes = [1735777505, 144602215, 4244567218];
+
 export const bucketHashes: Record<number, string> = {
   3448274439: 'Helmet',
   3551918588: 'Gauntlets',
@@ -49,5 +52,7 @@ export const armorTypes: Record<number, string> = {
   28: 'Chest',
   29: 'Legs',
 };
+
+export const armorItemSubTypes = [26, 27, 28, 29];
 
 export const intrinsicPlugHash = 1744546145;

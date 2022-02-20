@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { classTypeMap, orderedClassKeys } from '../../hashes';
+import { classTypeMap, orderedClassKeys, statHashes } from '../../hashes';
 import {
-  ArmorScoring,
   getDefaultHunterScoring,
   getDefaultScoring,
   getDefaultTitanScoring,
   getDefaultWarlockScoring,
 } from '../../scoring/scoring';
-import ScoringStorage from '../../storage/ScoringStorage';
+import ScoringStorage, { Scoring } from '../../storage/ScoringStorage';
 import './settings.scss';
 
 const Settings = () => {
@@ -15,9 +14,9 @@ const Settings = () => {
   const storedScoring = scoringStorage.getScoring();
   const initialScoring = storedScoring
     ? {
-        0: new ArmorScoring(storedScoring[0]),
-        1: new ArmorScoring(storedScoring[1]),
-        2: new ArmorScoring(storedScoring[2]),
+        0: storedScoring[0],
+        1: storedScoring[1],
+        2: storedScoring[2],
       }
     : {
         0: getDefaultTitanScoring(),
@@ -25,7 +24,7 @@ const Settings = () => {
         2: getDefaultWarlockScoring(),
       };
 
-  const [settings, setSettings] = useState<{ [key: number]: ArmorScoring }>(initialScoring);
+  const [settings, setSettings] = useState<Scoring>(initialScoring);
   const [saveButtonText, setSaveButtonText] = useState('Save Changes');
 
   const classes = [...orderedClassKeys];
@@ -33,7 +32,7 @@ const Settings = () => {
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
-    scoringStorage.setScoring(JSON.stringify(settings));
+    scoringStorage.setScoring(settings);
 
     setSaveButtonText('Saved!');
     setTimeout(() => setSaveButtonText('Save Changes'), 2000);
@@ -44,12 +43,7 @@ const Settings = () => {
     const [classType, stat] = name.split('-');
 
     const characterSetting = settings[parseInt(classType)];
-    if (stat === 'Mobility') characterSetting.Mobility = parseInt(value);
-    if (stat === 'Resilience') characterSetting.Resilience = parseInt(value);
-    if (stat === 'Recovery') characterSetting.Recovery = parseInt(value);
-    if (stat === 'Discipline') characterSetting.Discipline = parseInt(value);
-    if (stat === 'Intellect') characterSetting.Intellect = parseInt(value);
-    if (stat === 'Strength') characterSetting.Strength = parseInt(value);
+    characterSetting[parseInt(stat)] = parseInt(value);
 
     setSettings({ ...settings, [parseInt(classType)]: characterSetting });
     console.log(`changing ${name} to ${value}`);
@@ -76,7 +70,22 @@ const Settings = () => {
           {classes.map((classType) => (
             <div className="characterSettings" key={classType}>
               <h3>{classTypeMap[classType]}</h3>
-              <label>
+              {Object.keys(statHashes)
+                .map((x) => parseInt(x))
+                .map((stat) => (
+                  <label key={stat}>
+                    {statHashes[stat]}:
+                    <input
+                      type="number"
+                      name={`${classType}-${stat}`}
+                      onChange={handleInputChange}
+                      value={settings[classType][stat]}
+                      className="statInput"
+                      min="0"
+                    />{' '}
+                  </label>
+                ))}
+              {/* <label>
                 Mobility:{' '}
                 <input
                   type="number"
@@ -141,7 +150,7 @@ const Settings = () => {
                   className="statInput"
                   min="0"
                 />{' '}
-              </label>
+              </label> */}
             </div>
           ))}
         </div>

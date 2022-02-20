@@ -1,4 +1,3 @@
-import { ArmorScoring } from '../scoring/scoring';
 import Storage from './Storage';
 
 enum Locals {
@@ -6,7 +5,7 @@ enum Locals {
 }
 
 export interface Scoring {
-  [classKey: number]: ArmorScoring;
+  [classKey: number]: Record<number, number>;
 }
 
 export default class ScoringStorage extends Storage<Locals> {
@@ -30,7 +29,7 @@ export default class ScoringStorage extends Storage<Locals> {
     return undefined;
   }
 
-  public setScoring(scoring: string): void {
-    this.set(Locals.SCORING, scoring);
+  public setScoring(scoring: Scoring): void {
+    this.set(Locals.SCORING, JSON.stringify(scoring));
   }
 }

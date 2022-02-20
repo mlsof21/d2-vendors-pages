@@ -1,23 +1,34 @@
-import classNames from 'classnames';
-import { ArmorStats } from '../../scoring/items';
+import { statHashes } from '../../hashes';
 import ItemPopupStatBar from '../ItemPopupStatBar/ItemPopupStatBar';
 import './itemPopupStats.scss';
 
 type ItemPopupStatsProps = {
-  armorStats?: ArmorStats;
-  highlightedStats?: string[];
+  armorStats: Record<number, number>;
+  highlightedStats: string[];
 };
 
 const ItemPopupStats = ({ armorStats, highlightedStats }: ItemPopupStatsProps) => {
-  const mobilityClassName = highlightedStats?.includes('Mobility') ? 'highlightedStat' : '';
-  const resilienceClassName = highlightedStats?.includes('Resilience') ? 'highlightedStat' : '';
-  const recoveryClassName = highlightedStats?.includes('Recovery') ? 'highlightedStat' : '';
-  const disciplineClassName = highlightedStats?.includes('Discipline') ? 'highlightedStat' : '';
-  const intellectClassName = highlightedStats?.includes('Intellect') ? 'highlightedStat' : '';
-  const strengthClassName = highlightedStats?.includes('Strength') ? 'highlightedStat' : '';
+  // const mobilityClassName = highlightedStats?.includes('Mobility') ? 'highlightedStat' : '';
+  // const resilienceClassName = highlightedStats?.includes('Resilience') ? 'highlightedStat' : '';
+  // const recoveryClassName = highlightedStats?.includes('Recovery') ? 'highlightedStat' : '';
+  // const disciplineClassName = highlightedStats?.includes('Discipline') ? 'highlightedStat' : '';
+  // const intellectClassName = highlightedStats?.includes('Intellect') ? 'highlightedStat' : '';
+  // const strengthClassName = highlightedStats?.includes('Strength') ? 'highlightedStat' : '';
   return (
     <div className="statsContainer">
-      <div className="stat">
+      {Object.keys(statHashes)
+        .map((x) => parseInt(x))
+        .map((stat) => (
+          <div key={stat} className="stat">
+            <div className="statLabel">
+              <span className={highlightedStats.includes(statHashes[stat]) ? 'highlightedStat' : ''}>
+                {armorStats[stat]}
+              </span>
+              <ItemPopupStatBar stat={armorStats[stat]} />
+            </div>
+          </div>
+        ))}
+      {/* <div className="stat">
         <div className="statLabel">
           <span className={mobilityClassName}>Mobility:</span>
         </div>
@@ -58,7 +69,7 @@ const ItemPopupStats = ({ armorStats, highlightedStats }: ItemPopupStatsProps) =
         </div>
         <div className={classNames(strengthClassName, 'statValue')}>{armorStats?.Strength}</div>
         <ItemPopupStatBar stat={armorStats?.Strength} />
-      </div>
+      </div> */}
     </div>
   );
 };

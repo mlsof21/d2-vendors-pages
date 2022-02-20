@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { Armor } from '../../scoring/items';
+import { ScoredArmor } from '../../scoring/items';
 import './itemPopup.scss';
 import ItemPopupStats from './ItemPopupStats';
 
 type ItemPopupProps = {
-  armorInfo?: Armor;
+  armorInfo: ScoredArmor;
   show: boolean;
   onClickOutside: () => void;
   top: number;
@@ -45,7 +45,7 @@ const ItemPopup = ({ armorInfo, show, onClickOutside, top, left }: ItemPopupProp
         <div className="imgAndFlavor">
           <img src={armorInfo?.iconPath} />
         </div>
-        <ItemPopupStats armorStats={armorInfo?.stats} highlightedStats={armorInfo?.scoredStats} />
+        <ItemPopupStats armorStats={armorInfo.stats} highlightedStats={armorInfo.scoredStats} />
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import { DestinyInventoryItemDefinition, DestinyStat, DestinyVendorsResponse } from 'bungie-api-ts/destiny2';
-import { armorTypes, statHashes as statHashesMap, vendorHashes } from '../hashes';
+import { armorItemSubTypes, armorTypes, vendorHashes } from '../hashes';
 import { BUNGIE_ROOT } from '../helpers';
 import { getDestinyInventoryItemDefinitionFromStore } from '../storage/IndexedDB';
 import { Colors, getColors, getScores } from './scoring';
@@ -29,44 +29,61 @@ export async function getScorableItems(allVendors: {
 }
 
 export interface ScorableVendorItems {
-  [classType: number]: VendorArmor;
+  [classType: number]: ArmorByVendor;
 }
 
-export interface VendorArmor {
-  [vendorHash: number]: SaleArmor;
+export interface ArmorByVendor {
+  [vendorHash: number]: SaleArmorByType;
+}
+
+export interface SaleArmorByType {
+  [armorType: number]: SaleArmor | ScoredArmor;
 }
 
 export interface SaleArmor {
-  [armorType: number]: Armor;
+  saleKey: number;
+  itemHash: number;
+  armorType: string;
+  itemSubType: number;
+  stats: Record<number, number>;
+  // rawScore: number;
+  // normalizedScore: number;
+  // colors: Colors;
+  // theoreticalMin: number;
+  // theoreticalMax: number;
+  iconPath: string;
+  name: string;
+  // scoredStats: string[];
 }
 
-export interface Armor {
-  saleKey?: number;
-  itemHash?: number;
-  armorType?: string;
-  stats?: ArmorStats;
-  rawScore?: number;
-  normalizedScore?: number;
-  colors?: Colors;
-  theoreticalMin?: number;
-  theoreticalMax?: number;
-  iconPath?: string;
-  name?: string;
-  scoredStats?: string[];
+export interface ScoredArmor {
+  saleKey: number;
+  itemHash: number;
+  armorType: string;
+  itemSubType: number;
+  stats: Record<number, number>;
+  rawScore: number;
+  normalizedScore: number;
+  colors: Colors;
+  theoreticalMin: number;
+  theoreticalMax: number;
+  iconPath: string;
+  name: string;
+  scoredStats: string[];
 }
 
-export class ArmorStats {
-  public Mobility: number = 0;
-  public Resilience: number = 0;
-  public Recovery: number = 0;
-  public Discipline: number = 0;
-  public Intellect: number = 0;
-  public Strength: number = 0;
+// export class ArmorStats {
+//   public Mobility: number = 0;
+//   public Resilience: number = 0;
+//   public Recovery: number = 0;
+//   public Discipline: number = 0;
+//   public Intellect: number = 0;
+//   public Strength: number = 0;
 
-  constructor(init?: Partial<ArmorStats>) {
-    Object.assign(this, init);
-  }
-}
+//   constructor(init?: Partial<ArmorStats>) {
+//     Object.assign(this, init);
+//   }
+// }
 
 async function getArmor(
   vendors: DestinyVendorsResponse,
@@ -86,10 +103,11 @@ async function getArmor(
       const summaryItemHash = d2inventoryItems[itemHash].summaryItemHash!;
       const iconPath = `${BUNGIE_ROOT}${d2inventoryItems[itemHash].displayProperties.icon}`;
       const name = d2inventoryItems[itemHash].displayProperties.name;
-      if (isScorable(itemSubType) && summaryItemHash !== 715326750) {
+      if (isScorable(itemSubType) && summaryItemHash !== 715326750 && itemSubType !== 0) {
         armor[itemSubType] = {
           itemHash,
           saleKey: saleItemKey,
+          itemSubType: itemSubType,
           armorType: armorTypes[itemSubType],
           iconPath,
           name,
@@ -102,8 +120,7 @@ async function getArmor(
 }
 
 export function isScorable(itemSubType: number): boolean {
-  const armorTypeHashes = Object.keys(armorTypes).map((x) => parseInt(x));
-  return armorTypeHashes.includes(itemSubType);
+  return armorItemSubTypes.includes(itemSubType);
 }
 
 export async function getArmorScores(
@@ -132,32 +149,33 @@ export async function getArmorScores(
   return scorableItems;
 }
 
-function getStats(stats: { [key: number]: DestinyStat }): ArmorStats {
-  const armorStats = new ArmorStats();
+function getStats(stats: { [key: number]: DestinyStat }): Record<number, number> {
+  const armorStats: Record<number, number> = {};
 
   for (const statHash in stats) {
-    switch (statHashesMap[statHash]) {
-      case 'Mobility':
-        armorStats.Mobility = stats[statHash].value;
-        break;
-      case 'Resilience':
-        armorStats.Resilience = stats[statHash].value;
-        break;
-      case 'Recovery':
-        armorStats.Recovery = stats[statHash].value;
-        break;
-      case 'Discipline':
-        armorStats.Discipline = stats[statHash].value;
-        break;
-      case 'Intellect':
-        armorStats.Intellect = stats[statHash].value;
-        break;
-      case 'Strength':
-        armorStats.Strength = stats[statHash].value;
-        break;
-      default:
-        throw new Error('No idea what stat this is');
-    }
+    armorStats[statHash] = stats[statHash].value;
+    // switch (statHashesMap[statHash]) {
+    //   case 'Mobility':
+    //     armorStats.Mobility = stats[statHash].value;
+    //     break;
+    //   case 'Resilience':
+    //     armorStats.Resilience = stats[statHash].value;
+    //     break;
+    //   case 'Recovery':
+    //     armorStats.Recovery = stats[statHash].value;
+    //     break;
+    //   case 'Discipline':
+    //     armorStats.Discipline = stats[statHash].value;
+    //     break;
+    //   case 'Intellect':
+    //     armorStats.Intellect = stats[statHash].value;
+    //     break;
+    //   case 'Strength':
+    //     armorStats.Strength = stats[statHash].value;
+    //     break;
+    //   default:
+    //     throw new Error('No idea what stat this is');
+    // }
   }
 
   return armorStats;
