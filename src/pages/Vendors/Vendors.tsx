@@ -8,7 +8,12 @@ import {
 import ItemPopup from '../../components/ItemPopup/ItemPopup';
 import Spinner from '../../components/Spinner/Spinner';
 import { armorTypes, classTypeMap, orderedClassKeys as classKeys, vendorHashes } from '../../hashes';
-import { Armor, getArmorScores, getScorableItems as getScorableArmor, ScorableVendorItems } from '../../scoring/items';
+import {
+  getArmorScores,
+  getScorableItems as getScorableArmor,
+  SaleArmor,
+  ScorableVendorItems,
+} from '../../scoring/items';
 import { getDestinyInventoryItemDefinitionFromStore, storeManifest } from '../../storage/IndexedDB';
 import MembershipInfoStorage from '../../storage/MembershipStorage';
 import TokenStorage from '../../storage/TokenStorage';
@@ -89,7 +94,7 @@ const Vendors = () => {
   }
 
   const handleCheckedChange = () => setShowNormalized(!showNormalized);
-  const handleCellClicked = (event: React.MouseEvent<HTMLButtonElement>, armorInfo: Armor) => {
+  const handleCellClicked = (event: React.MouseEvent<HTMLButtonElement>, armorInfo: SaleArmor) => {
     setShowItemPopup(!showItemPopup);
     setItemPopupInfo(armorInfo);
     setPos({ top: event.pageY, left: event.pageX });
