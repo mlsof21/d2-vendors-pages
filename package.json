@@ -8,7 +8,7 @@
     "bungie-api-ts": "^4.11.0",
     "classnames": "^2.3.1",
     "env-cmd": "^10.1.0",
-    "firebase": "^9.6.4",
+    "firebase": "^9.6.7",
     "idb": "^7.0.0",
     "lodash": "^4.17.21",
     "node-sass": "^6.0.1",
