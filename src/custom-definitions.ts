@@ -9,7 +9,6 @@ export interface VendorArmor {
 export interface Vendor {
   ada1: Armor;
   devrim: Armor;
-  drifter: Armor;
   failsafe: Armor;
   shaxx: Armor;
   zavala: Armor;

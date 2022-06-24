@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom';
-import OAuth2Login from 'react-simple-oauth2-login';
-import { CLIENT_ID, getAccessTokenFromCode, REDIRECT_URI } from '../../helpers';
+import { v4 as uuidv4 } from 'uuid';
+import { CLIENT_ID, getAccessTokenFromCode } from '../../helpers';
 import './login.scss';
 
 interface LoginProps {
@@ -19,17 +19,19 @@ const Login = ({ handleAuth }: LoginProps) => {
 
   const onFailure = (response: Response) => console.log(response);
 
+  const getAuthorizationUrl = () => {
+    const queryParams = new URLSearchParams({
+      client_id: CLIENT_ID,
+      response_type: 'code',
+      state: uuidv4(),
+    });
+
+    return `https://www.bungie.net/en/OAuth/authorize?${queryParams}`;
+  };
   return (
-    <OAuth2Login
-      authorizationUrl="https://www.bungie.net/en/Oauth/Authorize"
-      responseType="code"
-      clientId={CLIENT_ID}
-      redirectUri={REDIRECT_URI}
-      onSuccess={onSuccess}
-      onFailure={onFailure}
-      buttonText="Login with Bungie.net"
-      className="loginButton"
-    />
+    <a rel="noopener noreferer" href={getAuthorizationUrl()} className="loginButton">
+      Login with Bungie.net
+    </a>
   );
 };
 

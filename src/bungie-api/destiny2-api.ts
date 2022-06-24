@@ -13,7 +13,6 @@ import {
   getProfile,
   getVendors as getVendorsTs,
 } from 'bungie-api-ts/destiny2';
-import { readVendorData, writeVendorData } from '../firebase/firebaseFunctions';
 import { $http, $httpAuthenticated } from '../helpers';
 import { MembershipInfo } from '../storage/MembershipStorage';
 import VendorStorage from '../storage/VendorStorage';
@@ -122,40 +121,18 @@ export async function getVendorsForAllCharacters(membershipInfo: MembershipInfo)
 
   const vendorStorage = VendorStorage.getInstance();
   const storageRefreshDate = vendorStorage.getRefreshDate();
-  let vendorRefreshDate = '';
 
-  let firebaseVendors: string | null = null;
-  console.time('FirebaseVendors');
-  console.timeLog('FirebaseVendors');
-  if (storageRefreshDate && !isExpired(storageRefreshDate)) firebaseVendors = await readVendorData(storageRefreshDate);
-  console.log({ firebaseVendors });
-  let fullResponse: { [key: number]: DestinyVendorsResponse } = {};
-  if (!firebaseVendors) {
-    console.time('GetVendors API');
-    console.timeLog('GetVendors API');
-    await Promise.all(
-      characterIds.map(async ({ id, classType }) => {
-        const response = await getVendors(id, membershipInfo.destinyMembershipId, membershipInfo.membershipType);
-        fullResponse[classType] = response;
+  const fullResponse: { [key: number]: DestinyVendorsResponse } = {};
+  console.time('GetVendors API');
+  console.timeLog('GetVendors API');
+  await Promise.all(
+    characterIds.map(async ({ id, classType }) => {
+      const response = await getVendors(id, membershipInfo.destinyMembershipId, membershipInfo.membershipType);
+      fullResponse[classType] = response;
+    }),
+  );
+  console.timeEnd('GetVendors API');
 
-        if (vendorRefreshDate === '') {
-          vendorRefreshDate = getRefreshDate(response.vendors);
-        }
-      }),
-    );
-    console.timeEnd('GetVendors API');
-  } else {
-    fullResponse = JSON.parse(firebaseVendors);
-  }
-  console.timeEnd('FirebaseVendors');
-
-  if (storageRefreshDate === null && vendorRefreshDate !== '') {
-    vendorStorage.setRefreshDate(vendorRefreshDate);
-  }
-
-  if (!firebaseVendors) {
-    writeVendorData(JSON.stringify(fullResponse), vendorRefreshDate);
-  }
   return fullResponse;
 }
 

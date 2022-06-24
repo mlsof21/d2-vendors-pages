@@ -19,7 +19,6 @@ export const orderedClassKeys = [1, 0, 2];
 export const vendorHashes: Record<number, string> = {
   350061650: 'Ada-1',
   396892126: 'Devrim',
-  248695599: 'Drifter',
   1576276905: 'Failsafe',
   3603221665: 'Shaxx',
   2190858386: 'Xur',
