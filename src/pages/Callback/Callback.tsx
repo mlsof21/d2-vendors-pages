@@ -12,10 +12,10 @@ const Callback = () => {
   useEffect(() => {
     const doThings = async () => {
       await getAccessTokenFromCode(authCode || '');
+      history.push('/');
     };
 
     doThings();
-    history.push('/vendors');
   }, []);
 
   console.log('Callback:', authCode);
