@@ -8,13 +8,15 @@ th {
   font-weight: bold;
 }
 
+tr {
+  height: 25px;
+}
+
 .scoreCell {
-  padding: 5px;
   border: 2px solid white;
   text-align: center;
   font-weight: normal;
   color: #ffffff;
-
   @media screen {
   }
 }
@@ -74,10 +76,14 @@ th {
   }
 }
 
-td > button {
+.vendorItemButton {
   background: transparent;
   border: none;
   color: white;
   font-size: inherit;
   font-family: inherit;
+  width: 100%;
+  height: inherit;
+  margin: 0;
+  padding: 5px 0;
 }

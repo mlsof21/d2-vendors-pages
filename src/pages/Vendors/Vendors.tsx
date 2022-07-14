@@ -89,7 +89,7 @@ const Vendors = () => {
   }
 
   const handleCheckedChange = () => setShowNormalized(!showNormalized);
-  const handleCellClicked = (event: React.MouseEvent<HTMLButtonElement>, armorInfo: Armor) => {
+  const handleCellClicked = (event: React.MouseEvent<HTMLDivElement>, armorInfo: Armor) => {
     setShowItemPopup(!showItemPopup);
     setItemPopupInfo(armorInfo);
     setPos({ top: event.pageY, left: event.pageX });
@@ -159,24 +159,22 @@ const Vendors = () => {
                         }
 
                         return (
-                          <td
-                            className="scoreCell"
-                            key={vendorHash}
-                            style={{
-                              backgroundColor: showNormalized
-                                ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
-                                : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
-                            }}
-                          >
-                            <button
-                              onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                          <td key={vendorHash} className="scoreCell">
+                            <div
+                              className="vendorItemButton"
+                              style={{
+                                backgroundColor: showNormalized
+                                  ? armorScores[classKey][vendorHash][armorType].colors?.normalizedColorHex
+                                  : armorScores[classKey][vendorHash][armorType].colors?.colorHex,
+                              }}
+                              onClick={(event: React.MouseEvent<HTMLDivElement>) =>
                                 handleCellClicked(event, armorScores[classKey][vendorHash][armorType])
                               }
                             >
                               {showNormalized
                                 ? armorScores[classKey][vendorHash][armorType].normalizedScore
                                 : armorScores[classKey][vendorHash][armorType].rawScore}
-                            </button>
+                            </div>
                           </td>
                         );
                       })}

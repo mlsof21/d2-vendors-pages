@@ -76,7 +76,7 @@ export function getNormalizedScore(score: number, theoreticalMin: number, theore
 }
 
 export function getColors(score: Score): Colors {
-  const gradient = tinygradient(['#FF0000', '#00FF00']);
+  const gradient = tinygradient(['#FF0000', '#00AA00']);
   const colorsRgb = gradient.rgb(Math.max(score.theoreticalMax - score.theoreticalMin, 2));
   const colorHex = colorsRgb[Math.max(score.rawScore - score.theoreticalMin - 1, 0)].toHexString();
   const colorsRgbNormalized = gradient.rgb(100);

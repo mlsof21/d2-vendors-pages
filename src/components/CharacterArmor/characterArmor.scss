@@ -1,12 +1,12 @@
 .characterArmor {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
 .itemCell {
-  flex: 0 32%;
-  height: 96px;
+  height: 60px;
   margin-bottom: 2%;
   position: relative;
 }
@@ -14,11 +14,11 @@
 .item-img {
   height: 60px;
   width: 60px;
-  position: absolute;
 }
 
 .scoreOverlay {
   position: absolute;
   top: 3px;
   right: 3px;
+  background-color: black;
 }
